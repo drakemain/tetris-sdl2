@@ -33,23 +33,40 @@ bool Tetris::init() {
 }
 
 void Tetris::run() {
-  // Tetromino tetromino(this->renderer);
+  Tetromino tetromino(this->renderer);
+  // Cell cell(this->renderer);
+  int x = 0;
 
   std::cout << "RUN" << std::endl;
   bool isRunning = true;
   SDL_Event event;
 
   while(isRunning) {
-    SDL_PollEvent(&event);
+    if (SDL_PollEvent(&event) > 0) {
+      if (event.type == SDL_QUIT) {
+        isRunning = false;
+      } else if (event.type == SDL_KEYDOWN) {
+        SDL_Keycode key = event.key.keysym.sym;
+        switch(key) {
+          case SDLK_RIGHT:
+          x += 25;
+          // cell.setPositionX(x);
+          break;
 
-    if (event.type == SDL_QUIT) {
-      isRunning = false;
+          case SDLK_LEFT:
+          x -= 25;
+          // cell.setPositionX(x);
+        }
+      }
     }
+
+    
 
     SDL_SetRenderDrawColor(this->renderer, 0, 127, 255, 0);
     SDL_RenderClear(this->renderer);
     SDL_SetRenderDrawColor(this->renderer, 255, 127, 255, 0);
-    
+    // cell.render(this->renderer);
+    tetromino.render(this->renderer);
     SDL_RenderPresent(this->renderer);
   }
 }

@@ -17,6 +17,8 @@ public:
   Tetromino(SDL_Renderer* renderer);
   ~Tetromino();
 
+  void render(SDL_Renderer* renderer);
+
 private:
   void initMatrix(SDL_Renderer* renderer);
 

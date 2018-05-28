@@ -35,3 +35,32 @@ void Cell::render(SDL_Renderer* renderer) {
 SDL_Texture* Cell::getCell() const {
   return this->cell;
 }
+
+void Cell::setPosition(int x, int y) {
+  this->cellContainer.x = x;
+  this->cellContainer.y = y;
+}
+
+void Cell::setPositionX(int x) {
+  this->cellContainer.x = x;
+}
+
+void Cell::setPositionY(int y) {
+  this->cellContainer.y = y;
+}
+
+void Cell::incrementX(bool negative = false, int gridUnits = 1) {
+  if (negative) {
+    this->cellContainer.x -= gridUnits * 25;
+  } else {
+    this->cellContainer.x += gridUnits * 25;
+  }
+}
+
+void Cell::incrementY(bool negative = false, int gridUnits = 1) {
+  if (negative) {
+    this->cellContainer.y -= gridUnits * 25;
+  } else {
+    this->cellContainer.y += gridUnits * 25;
+  }
+} 
