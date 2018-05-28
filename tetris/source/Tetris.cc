@@ -1,5 +1,5 @@
 #include "tetris/headers/Tetris.h"
-#include "tetris/headers/cell.h"
+#include "tetris/headers/tetromino.h"
 #include <SDL_image.h>
 #include <iostream>
 
@@ -33,9 +33,7 @@ bool Tetris::init() {
 }
 
 void Tetris::run() {
-  Cell cell(this->renderer);
-
-  cell.setColor(this->renderer, 255, 127, 64);
+  // Tetromino tetromino(this->renderer);
 
   std::cout << "RUN" << std::endl;
   bool isRunning = true;
@@ -51,7 +49,6 @@ void Tetris::run() {
     SDL_SetRenderDrawColor(this->renderer, 0, 127, 255, 0);
     SDL_RenderClear(this->renderer);
     SDL_SetRenderDrawColor(this->renderer, 255, 127, 255, 0);
-    cell.render(this->renderer);
     
     SDL_RenderPresent(this->renderer);
   }
