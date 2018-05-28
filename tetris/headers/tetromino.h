@@ -18,6 +18,7 @@ public:
   ~Tetromino();
 
   void render(SDL_Renderer* renderer);
+  void shift(int gridUnitsX, int gridUnitsY);
 
 private:
   void initMatrix(SDL_Renderer* renderer);

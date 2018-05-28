@@ -26,14 +26,21 @@ void Tetromino::render(SDL_Renderer* renderer) {
   }
 }
 
+void Tetromino::shift(int gridUnitsX = 0, int gridUnitsY = 0) {
+  for (std::vector<Cell*>* row : this->matrix) {
+    for (std::size_t j = 0; j < row->size(); ++j) {
+      row->operator[](j)->shift(gridUnitsX, gridUnitsY);
+    }
+  }
+}
+
 void Tetromino::initMatrix(SDL_Renderer* renderer) {
   for (std::size_t i = 0; i < 4; ++i) {
     std::vector<Cell*>* row = new std::vector<Cell*>;
     this->matrix.push_back(row);
     for (std::size_t j = 0; j < 4; ++j) {
       matrix[i]->push_back(new Cell(renderer));
-      matrix[i]->operator[](j)->incrementX(false, i);
-      matrix[i]->operator[](j)->incrementY(false, j);
+      matrix[i]->operator[](j)->shift(i, j);
       matrix[i]->operator[](j)->setColor(renderer, i * 32, j * 32, 127);
     }
   }
