@@ -23,7 +23,8 @@ Cell::~Cell() {
 void Cell::setColor(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b) {
   SDL_Surface* surface = SDL_CreateRGBSurface(0, 5, 5, 32, 0, 0, 0, 0);
   SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, r, g, b));
-
+  
+  SDL_DestroyTexture(this->cell);
   this->cell = SDL_CreateTextureFromSurface(renderer, surface);
   SDL_FreeSurface(surface);
 }
