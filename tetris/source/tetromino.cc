@@ -39,9 +39,8 @@ void Tetromino::initMatrix(SDL_Renderer* renderer) {
     std::vector<Cell*>* row = new std::vector<Cell*>;
     this->matrix.push_back(row);
     for (std::size_t j = 0; j < 4; ++j) {
-      matrix[i]->push_back(new Cell(renderer));
+      matrix[i]->push_back(new Cell(renderer, i * 32, j * 32, 127));
       matrix[i]->operator[](j)->shift(i, j);
-      matrix[i]->operator[](j)->setColor(renderer, i * 32, j * 32, 127);
     }
   }
 

@@ -4,6 +4,7 @@
 class Cell {
 public:
   Cell(SDL_Renderer* renderer);
+  Cell(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b);
   ~Cell();
 
   void setColor(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b);
@@ -18,5 +19,5 @@ public:
 
 private:
   SDL_Texture* cell;
-  SDL_Rect cellContainer;
+  SDL_Rect container;
 };

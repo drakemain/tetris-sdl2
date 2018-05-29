@@ -9,10 +9,19 @@ Cell::Cell(SDL_Renderer* renderer) {
   this->cell = SDL_CreateTextureFromSurface(renderer, surface);
   SDL_FreeSurface(surface);
 
-  this->cellContainer.x = 25;
-  this->cellContainer.y = 25;
-  this->cellContainer.w = 25;
-  this->cellContainer.h = 25;
+  this->container.x = 0;
+  this->container.y = 0;
+  this->container.w = 25;
+  this->container.h = 25;
+}
+
+Cell::Cell(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b) {
+  this->setColor(renderer, r, g, b);
+
+  this->container.x = 0;
+  this->container.y = 0;
+  this->container.w = 25;
+  this->container.h = 25;
 }
 
 Cell::~Cell() {
@@ -30,7 +39,7 @@ void Cell::setColor(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b) {
 }
 
 void Cell::render(SDL_Renderer* renderer) {
-  SDL_RenderCopy(renderer, this->cell, NULL, &this->cellContainer);
+  SDL_RenderCopy(renderer, this->cell, NULL, &this->container);
 }
 
 SDL_Texture* Cell::getCell() const {
@@ -38,11 +47,11 @@ SDL_Texture* Cell::getCell() const {
 }
 
 void Cell::setPosition(int x, int y) {
-  this->cellContainer.x = x;
-  this->cellContainer.y = y;
+  this->container.x = x;
+  this->container.y = y;
 }
 
 void Cell::shift(int gridX, int gridY) {
-  this->cellContainer.x += gridX * 25;
-  this->cellContainer.y += gridY * 25;
+  this->container.x += gridX * 25;
+  this->container.y += gridY * 25;
 }
