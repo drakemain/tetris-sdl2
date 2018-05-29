@@ -42,16 +42,12 @@ void Cell::render(SDL_Renderer* renderer) {
   SDL_RenderCopy(renderer, this->cell, NULL, &this->container);
 }
 
-SDL_Texture* Cell::getCell() const {
-  return this->cell;
+void Cell::shift(int gridX, int gridY) {
+  this->container.x += gridX * 25;
+  this->container.y += gridY * 25;
 }
 
 void Cell::setPosition(int x, int y) {
   this->container.x = x;
   this->container.y = y;
-}
-
-void Cell::shift(int gridX, int gridY) {
-  this->container.x += gridX * 25;
-  this->container.y += gridY * 25;
 }

@@ -1,10 +1,6 @@
 #include "tetris/headers/tetromino.h"
 #include <iostream>
 
-// Tetromino::Tetromino(Shape shape) {
-  
-// }
-
 Tetromino::Tetromino(SDL_Renderer* renderer) {
   this->initMatrix(renderer);
 }
