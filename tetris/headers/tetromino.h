@@ -1,5 +1,7 @@
+#pragma once
 #include "tetris/headers/cell.h"
 #include <vector>
+#include <map>
 
 enum class Shape {
   I,
@@ -14,7 +16,7 @@ enum class Shape {
 class Tetromino {
 public:
   // Constructor; Needs render target
-  Tetromino(SDL_Renderer* renderer);
+  Tetromino(SDL_Renderer* renderer, Shape shape);
   // Delete each cell and vector container
   ~Tetromino();
 
@@ -25,9 +27,9 @@ public:
 
 private:
   // Initializes the container for the cell pointers
-  void initMatrix(SDL_Renderer* renderer);
+  void initCells(SDL_Renderer* renderer, std::array<std::array<Uint8, 4>, 4> shapeMatrix);
 
 private:
   // Pointers to the tetromino's cells
-  std::vector<std::vector<Cell*>*> matrix;
+  std::vector<std::vector<Cell*>*> cellContainer;
 };

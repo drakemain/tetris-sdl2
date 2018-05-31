@@ -1,5 +1,4 @@
 #include "tetris/headers/cell.h"
-#include <iostream>
 
 Cell::Cell(SDL_Renderer* renderer) {
   SDL_CreateRGBSurface(0, 5, 5, 32, 0, 0, 0, 0);
@@ -26,7 +25,6 @@ Cell::Cell(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b) {
 
 Cell::~Cell() {
   SDL_DestroyTexture(this->cell);
-  std::cout << "Cell deleted." << std::endl;
 }
 
 void Cell::setColor(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b) {
