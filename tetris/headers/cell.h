@@ -4,9 +4,9 @@
 class Cell {
 public:
   // Constructor for default color (black)
-  Cell(SDL_Renderer* renderer);
+  Cell(SDL_Renderer* renderer, int size);
   // Constructor for custom color
-  Cell(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b);
+  Cell(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b, int size);
   // Cleanup on deletion
   ~Cell();
 

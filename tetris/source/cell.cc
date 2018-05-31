@@ -1,6 +1,6 @@
 #include "tetris/headers/cell.h"
 
-Cell::Cell(SDL_Renderer* renderer) {
+Cell::Cell(SDL_Renderer* renderer, int size) {
   SDL_CreateRGBSurface(0, 5, 5, 32, 0, 0, 0, 0);
 
   SDL_Surface* surface = SDL_CreateRGBSurface(0, 5, 5, 32, 0, 0, 0, 0);
@@ -10,17 +10,17 @@ Cell::Cell(SDL_Renderer* renderer) {
 
   this->container.x = 0;
   this->container.y = 0;
-  this->container.w = 25;
-  this->container.h = 25;
+  this->container.w = size;
+  this->container.h = size;
 }
 
-Cell::Cell(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b) {
+Cell::Cell(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b, int size) {
   this->setColor(renderer, r, g, b);
 
   this->container.x = 0;
   this->container.y = 0;
-  this->container.w = 25;
-  this->container.h = 25;
+  this->container.w = size;
+  this->container.h = size;
 }
 
 Cell::~Cell() {
@@ -41,8 +41,8 @@ void Cell::render(SDL_Renderer* renderer) {
 }
 
 void Cell::shift(int gridX, int gridY) {
-  this->container.x += gridX * 25;
-  this->container.y += gridY * 25;
+  this->container.x += gridX * this->container.w;
+  this->container.y += gridY * this->container.h;
 }
 
 void Cell::setPosition(int x, int y) {

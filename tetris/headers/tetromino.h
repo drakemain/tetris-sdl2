@@ -16,7 +16,7 @@ enum class Shape {
 class Tetromino {
 public:
   // Constructor; Needs render target
-  Tetromino(SDL_Renderer* renderer, Shape shape);
+  Tetromino(SDL_Renderer* renderer, Shape shape, int cellSize);
   // Delete each cell and vector container
   ~Tetromino();
 
@@ -27,7 +27,7 @@ public:
 
 private:
   // Initializes the container for the cell pointers
-  void initCells(SDL_Renderer* renderer, std::array<std::array<Uint8, 4>, 4> shapeMatrix);
+  void initCells(SDL_Renderer* renderer, std::array<std::array<Uint8, 4>, 4> shapeMatrix, int size);
   // Maps Uint8 to RGB struct
   SDL_Color getColor(Uint8);
 

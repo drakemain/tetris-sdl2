@@ -33,7 +33,7 @@ bool Tetris::init() {
 }
 
 void Tetris::run() {
-  Tetromino tetromino(this->renderer, Shape::Z);
+  Tetromino tetromino(this->renderer, Shape::Z, this->gridUnitSize);
   std::cout << "RUN" << std::endl;
   bool isRunning = true;
   SDL_Event event;
