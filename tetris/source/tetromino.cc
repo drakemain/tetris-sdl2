@@ -3,7 +3,8 @@
 
 typedef std::array<std::array<Uint8, 4>, 4> ShapeMatrix;
 
-ShapeMatrix I =
+
+const ShapeMatrix I =
 {
   std::array<Uint8, 4>{0,1,0,0},
   std::array<Uint8, 4>{0,1,0,0},
@@ -11,44 +12,44 @@ ShapeMatrix I =
   std::array<Uint8, 4>{0,1,0,0}
 };
 
-ShapeMatrix J = {
-  std::array<Uint8, 4>{0,0,1,0},
-  std::array<Uint8, 4>{0,0,1,0},
-  std::array<Uint8, 4>{0,1,1,0},
+const ShapeMatrix J = {
+  std::array<Uint8, 4>{0,0,2,0},
+  std::array<Uint8, 4>{0,0,2,0},
+  std::array<Uint8, 4>{0,2,2,0},
   std::array<Uint8, 4>{0,0,0,0}
 };
 
-ShapeMatrix L = {
-  std::array<Uint8, 4>{0,1,0,0},
-  std::array<Uint8, 4>{0,1,0,0},
-  std::array<Uint8, 4>{0,1,1,0},
+const ShapeMatrix L = {
+  std::array<Uint8, 4>{0,3,0,0},
+  std::array<Uint8, 4>{0,3,0,0},
+  std::array<Uint8, 4>{0,3,3,0},
   std::array<Uint8, 4>{0,0,0,0}
 };
 
-ShapeMatrix O = {
-  std::array<Uint8, 4>{0,1,1,0},
-  std::array<Uint8, 4>{0,1,1,0},
+const ShapeMatrix O = {
+  std::array<Uint8, 4>{0,4,4,0},
+  std::array<Uint8, 4>{0,4,4,0},
   std::array<Uint8, 4>{0,0,0,0},
   std::array<Uint8, 4>{0,0,0,0}
 };
 
-ShapeMatrix S = {
-  std::array<Uint8, 4>{0,1,1,0},
-  std::array<Uint8, 4>{1,1,0,0},
+const ShapeMatrix S = {
+  std::array<Uint8, 4>{0,5,5,0},
+  std::array<Uint8, 4>{5,5,0,0},
   std::array<Uint8, 4>{0,0,0,0},
   std::array<Uint8, 4>{0,0,0,0}
 };
 
-ShapeMatrix T = {
-  std::array<Uint8, 4>{1,1,1,0},
-  std::array<Uint8, 4>{0,1,0,0},
+const ShapeMatrix T = {
+  std::array<Uint8, 4>{6,6,6,0},
+  std::array<Uint8, 4>{0,6,0,0},
   std::array<Uint8, 4>{0,0,0,0},
   std::array<Uint8, 4>{0,0,0,0}
 };
 
-ShapeMatrix Z = {
-  std::array<Uint8, 4>{1,1,0,0},
-  std::array<Uint8, 4>{0,1,1,0},
+const ShapeMatrix Z = {
+  std::array<Uint8, 4>{7,7,0,0},
+  std::array<Uint8, 4>{0,7,7,0},
   std::array<Uint8, 4>{0,0,0,0},
   std::array<Uint8, 4>{0,0,0,0}
 };
@@ -103,6 +104,8 @@ void Tetromino::shift(int gridUnitsX = 0, int gridUnitsY = 0) {
 }
 
 void Tetromino::initCells(SDL_Renderer* renderer, ShapeMatrix shape) {
+  SDL_Color color;
+  
   for (int i = 0; i < 4; ++i) {
     std::vector<Cell*>* row = new std::vector<Cell*>;
     this->cellContainer.push_back(row);
@@ -111,18 +114,46 @@ void Tetromino::initCells(SDL_Renderer* renderer, ShapeMatrix shape) {
       if (shape[j][i] == 0) {
         this->cellContainer[i]->push_back(NULL);
       } else {
-        this->cellContainer[i]->push_back(new Cell(renderer, i * 32, j * 32, 127));
+        color = this->getColor(shape[j][i]);
+        this->cellContainer[i]->push_back(new Cell(renderer, color.r, color.g, color.b));
         this->cellContainer[i]->operator[](j)->shift(i, j);
       }
     }
   }
+}
 
-  // for (std::size_t i = 0; i < 4; ++i) {
-  //   std::vector<Cell*>* row = new std::vector<Cell*>;
-  //   this->cellContainer.push_back(row);
-  //   for (std::size_t j = 0; j < 4; ++j) {
-  //     cellContainer[i]->push_back(new Cell(renderer, i * 32, j * 32, 127));
-  //     cellContainer[i]->operator[](j)->shift(i, j);
-  //   }
-  // }
+SDL_Color Tetromino::getColor(Uint8 matrixValue) {
+  SDL_Color color;
+
+  switch(matrixValue) {
+    case 1:
+    color.r = 0, color.g = 0; color.b = 255; color.a = 255;
+    break;
+
+    case 2:
+    color.r = 255, color.g = 0; color.b = 0; color.a = 255;
+    break;
+
+    case 3:
+    color.r = 0, color.g = 255; color.b = 0; color.a = 255;
+    break;
+
+    case 4:
+    color.r = 255, color.g = 255; color.b = 0; color.a = 255;
+    break;
+
+    case 5:
+    color.r = 173, color.g = 216; color.b = 230; color.a = 255;
+    break;
+
+    case 6:
+    color.r = 160, color.g = 32; color.b = 240; color.a = 255;
+    break;
+
+    case 7:
+    color.r = 255, color.g = 192; color.b = 203; color.a = 255;
+    break;
+  }
+
+  return color;
 }

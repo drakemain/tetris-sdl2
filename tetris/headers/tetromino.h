@@ -28,6 +28,8 @@ public:
 private:
   // Initializes the container for the cell pointers
   void initCells(SDL_Renderer* renderer, std::array<std::array<Uint8, 4>, 4> shapeMatrix);
+  // Maps Uint8 to RGB struct
+  SDL_Color getColor(Uint8);
 
 private:
   // Pointers to the tetromino's cells
