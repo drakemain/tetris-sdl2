@@ -3,7 +3,6 @@
 
 typedef std::array<std::array<Uint8, 4>, 4> ShapeMatrix;
 
-
 const ShapeMatrix I =
 {
   std::array<Uint8, 4>{0,1,0,0},
@@ -106,11 +105,11 @@ void Tetromino::shift(int gridUnitsX = 0, int gridUnitsY = 0) {
 void Tetromino::initCells(SDL_Renderer* renderer, ShapeMatrix shape, int size) {
   SDL_Color color;
   
-  for (int i = 0; i < 4; ++i) {
+  for (std::size_t i = 0; i < shape.size(); ++i) {
     std::vector<Cell*>* row = new std::vector<Cell*>;
     this->cellContainer.push_back(row);
 
-    for (int j = 0; j < 4; ++j) {
+    for (std::size_t j = 0; j < shape[i].size(); ++j) {
       if (shape[j][i] == 0) {
         this->cellContainer[i]->push_back(NULL);
       } else {
