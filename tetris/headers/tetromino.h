@@ -33,5 +33,7 @@ private:
 
 private:
   // Pointers to the tetromino's cells
-  std::vector<std::vector<Cell*>*> cellContainer;
+  std::vector<Cell*> cells;
+  // Matrix representing tetromino shape
+  std::array<std::array<Uint8, 4>, 4> shapeMatrix;
 };
