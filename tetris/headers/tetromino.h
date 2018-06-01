@@ -24,6 +24,8 @@ public:
   void render(SDL_Renderer* renderer);
   // Adjusts the position of each of the cells
   void shift(int gridUnitsX, int gridUnitsY);
+  // Rotate the cells within the matrix CW 90 degrees
+  void rotate(SDL_Renderer* renderer);
 
 private:
   // Initializes the container for the cell pointers
@@ -36,4 +38,6 @@ private:
   std::vector<Cell*> cells;
   // Matrix representing tetromino shape
   std::array<std::array<Uint8, 4>, 4> shapeMatrix;
+  // Square size of cells
+  int cellSize;
 };

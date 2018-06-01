@@ -53,7 +53,8 @@ const ShapeMatrix Z = {
   std::array<Uint8, 4>{0,0,0,0}
 };
 
-Tetromino::Tetromino(SDL_Renderer* renderer, Shape shape, int cellSize) {
+Tetromino::Tetromino(SDL_Renderer* renderer, Shape shape, int cellSize)
+:cellSize(cellSize) {
   ShapeMatrix shapeMatrix;
 
   switch(shape) {
@@ -89,7 +90,40 @@ void Tetromino::shift(int gridUnitsX = 0, int gridUnitsY = 0) {
   }
 }
 
+void Tetromino::rotate(SDL_Renderer* renderer) {
+  std::array<std::array<Uint8, 4>, 4> newShapeMatrix;
+
+  for (std::size_t currentRow = 0; currentRow < this->shapeMatrix.size(); ++currentRow) {
+    for (std::size_t currentColumn = 0; currentColumn < this->shapeMatrix[currentRow].size(); ++currentColumn) {
+      newShapeMatrix[currentColumn][this->shapeMatrix.size() - currentRow - 1] = this->shapeMatrix[currentRow][currentColumn];
+    }
+  }
+
+  this->shapeMatrix = newShapeMatrix;
+
+  this->initCells(renderer, this->shapeMatrix, this->cellSize);
+
+  // for (std::size_t i = 0; i < this->shapeMatrix.size(); ++i) {
+  //   for (std::size_t j = 0; j < this->shapeMatrix.size(); ++j) {
+  //     std::cout << static_cast<int>(this->shapeMatrix[i][j]);
+  //   }
+
+  //   std::cout << std::endl;
+  // }
+
+  // std::cout << std::endl;
+
+  // for (std::size_t i = 0; i < this->shapeMatrix.size(); ++i) {
+  //   for (std::size_t j = 0; j < this->shapeMatrix.size(); ++j) {
+  //     std::cout << static_cast<int>(newShapeMatrix[i][j]);
+  //   }
+
+  //   std::cout << std::endl;
+  // }
+}
+
 void Tetromino::initCells(SDL_Renderer* renderer, ShapeMatrix shape, int size) {
+  this->cells.clear();
   SDL_Color color;
 
   for (std::size_t row = 0; row < shape.size(); ++row) {
