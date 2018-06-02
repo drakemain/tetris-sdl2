@@ -40,4 +40,6 @@ private:
   std::array<std::array<Uint8, 4>, 4> shapeMatrix;
   // Square size of cells
   int cellSize;
+  // Position of the tetromino which cells are positioned relative to
+  std::pair<int, int> position;
 };
