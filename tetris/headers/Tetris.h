@@ -1,4 +1,5 @@
 #pragma once
+#include "tetris/headers/tetromino.h"
 #include <SDL.h>
 
 class Tetris {
@@ -15,11 +16,13 @@ public:
   SDL_Renderer* getRenderer() const;
 
 private:
-  void render();
+  void render(Tetromino& tetromino);
 
 private:
   SDL_Window* window;
   SDL_Renderer* renderer;
+
+  SDL_Rect gameBoard;
 
   const int WIDTH = 640;
   const int HEIGHT = 480;

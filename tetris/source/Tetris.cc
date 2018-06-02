@@ -1,5 +1,4 @@
 #include "tetris/headers/Tetris.h"
-#include "tetris/headers/tetromino.h"
 #include <SDL_image.h>
 #include <iostream>
 
@@ -28,12 +27,17 @@ bool Tetris::init() {
     return success;
   }
 
+  this->gameBoard.x = 0;
+  this->gameBoard.y = 0;
+  this->gameBoard.w = this->WIDTH;
+  this->gameBoard.h = this->HEIGHT;
+
   std::cout << "Init successful." << std::endl;
   return success;
 }
 
 void Tetris::run() {
-  Tetromino tetromino(this->renderer, Shape::J, this->gridUnitSize);
+  Tetromino tetromino(this->renderer, Shape::S, this->gridUnitSize);
   std::cout << "RUN" << std::endl;
   bool isRunning = true;
   SDL_Event event;
@@ -67,14 +71,7 @@ void Tetris::run() {
         }
       }
     }
-
-    
-
-    SDL_SetRenderDrawColor(this->renderer, 0, 127, 255, 0);
-    SDL_RenderClear(this->renderer);
-    SDL_SetRenderDrawColor(this->renderer, 255, 127, 255, 0);
-    tetromino.render(this->renderer);
-    SDL_RenderPresent(this->renderer);
+    this->render(tetromino);
   }
 }
 
@@ -89,4 +86,14 @@ void Tetris::cleanup() {
 
 SDL_Renderer* Tetris::getRenderer() const {
   return this->renderer;
+}
+
+void Tetris::render(Tetromino& tetromino) {
+  SDL_RenderSetViewport(this->getRenderer(), &this->gameBoard);
+
+  SDL_SetRenderDrawColor(this->renderer, 0, 127, 255, 0);
+  SDL_RenderClear(this->renderer);
+  SDL_SetRenderDrawColor(this->renderer, 255, 127, 255, 0);
+  tetromino.render(this->renderer);
+  SDL_RenderPresent(this->renderer);
 }
