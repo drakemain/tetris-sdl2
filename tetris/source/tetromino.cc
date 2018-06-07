@@ -1,8 +1,6 @@
 #include "tetris/headers/tetromino.h"
 #include <iostream>
 
-typedef std::array<std::array<Uint8, 4>, 4> ShapeMatrix;
-
 const ShapeMatrix I =
 {
   std::array<Uint8, 4>{0,1,0,0},
@@ -86,13 +84,23 @@ void Tetromino::render(SDL_Renderer* renderer) {
   }
 }
 
-void Tetromino::shift(int gridUnitsX = 0, int gridUnitsY = 0) {
+bool Tetromino::shift(int gridUnitsX, int gridUnitsY, std::pair<int, int> bounds) {
+  std::pair<int, int> positionDelta;
+  positionDelta.first = gridUnitsX * this->cellSize;
+  positionDelta.second = gridUnitsY * this->cellSize;
+
+  if (!this->isWithinBounds(positionDelta, bounds)) {
+    return false;
+  }
+
   this->position.first += gridUnitsX;
   this->position.second += gridUnitsY;
 
   for (Cell* cell : this->cells) {
     cell->shift(gridUnitsX, gridUnitsY);
   }
+
+  return true;
 }
 
 void Tetromino::rotate(SDL_Renderer* renderer) {
@@ -107,6 +115,27 @@ void Tetromino::rotate(SDL_Renderer* renderer) {
   this->shapeMatrix = newShapeMatrix;
 
   this->initCells(renderer, this->shapeMatrix, this->cellSize);
+}
+
+bool Tetromino::isWithinBounds(std::pair<int, int> positionDelta, std::pair<int, int> bounds) {
+  std::cout << "T: " << this->getTopBound() << " B: " << this->getBottomBound() <<
+    " L: " << this->getLeftBound() << " R: " << this->getRightBound() << std::endl;
+
+  if ((this->getTopBound() + positionDelta.second) < 0) {
+    std::cout << "TOP" << std::endl;
+    return false;
+  } else if ((this->getBottomBound() + positionDelta.second) > bounds.second) {
+    std::cout << "BOTTOM" << std::endl;
+    return false;
+  } else if ((this->getLeftBound() + positionDelta.first) < 0) {
+    std::cout << "LEFT" << std::endl;
+    return false;
+  } else if ((this->getRightBound() + positionDelta.first) > bounds.first) {
+    std::cout << "RIGHT" << std::endl;
+    return false;
+  }
+
+  return true;
 }
 
 void Tetromino::initCells(SDL_Renderer* renderer, ShapeMatrix shape, int size) {
@@ -158,4 +187,60 @@ SDL_Color Tetromino::getColor(Uint8 matrixValue) {
   }
 
   return color;
+}
+
+int Tetromino::getTopBound() {
+  if (this->cells.size() == 0) { return -1; }
+
+  int bound = this->cells[0]->getPosition().second;
+  
+  for (Cell* cell : this->cells) {
+    if (cell->getPosition().second < bound) {
+      bound = cell->getPosition().second;
+    }
+  }
+
+  return bound;
+}
+
+int Tetromino::getBottomBound() {
+  if (this->cells.size() == 0) { return -1; }
+  
+  int bound = 0;
+
+  for (Cell* cell : this->cells) {
+    if (cell->getPosition().second > bound) {
+      bound = cell->getPosition().second;
+    }
+  }
+
+  return bound + this->cellSize;
+}
+
+int Tetromino::getLeftBound() {
+  if (this->cells.size() == 0) { return -1; }
+
+  int bound = this->cells[0]->getPosition().first;
+  
+  for (Cell* cell : this->cells) {
+    if (cell->getPosition().first < bound) {
+      bound = cell->getPosition().first;
+    }
+  }
+
+  return bound;
+}
+
+int Tetromino::getRightBound() {
+  if (this->cells.size() == 0) { return -1; }
+  
+  int bound = 0;
+
+  for (Cell* cell : this->cells) {
+    if (cell->getPosition().first > bound) {
+      bound = cell->getPosition().first;
+    }
+  }
+
+  return bound + this->cellSize;
 }

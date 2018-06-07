@@ -22,6 +22,10 @@ public:
   // Adjusts the cell position
   void shift(int gridX, int gridY);
 
+  // Getters
+  std::pair<int, int> getPosition() const;
+  int getSize() const;
+
 private:
   // Set the position the cell should be rendered at
   void setPosition(int x, int y);

@@ -48,21 +48,24 @@ void Tetris::run() {
         isRunning = false;
       } else if (event.type == SDL_KEYDOWN) {
         SDL_Keycode key = event.key.keysym.sym;
+        std::pair<int, int> bounds;
+        bounds.first = gameBoard.w;
+        bounds.second = gameBoard.h;
         switch(key) {
           case SDLK_RIGHT:
-          tetromino.shift(1, 0);
+          tetromino.shift(1, 0, bounds);
           break;
 
           case SDLK_LEFT:
-          tetromino.shift(-1, 0);
+          tetromino.shift(-1, 0, bounds);
           break;
 
           case SDLK_UP:
-          tetromino.shift(0, -1);
+          tetromino.shift(0, -1, bounds);
           break;
 
           case SDLK_DOWN:
-          tetromino.shift(0, 1);
+          tetromino.shift(0, 1, bounds);
           break;
 
           case SDLK_SPACE:

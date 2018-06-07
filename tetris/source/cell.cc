@@ -1,4 +1,5 @@
 #include "tetris/headers/cell.h"
+#include <iostream>
 
 Cell::Cell(SDL_Renderer* renderer, int size) {
   SDL_CreateRGBSurface(0, 5, 5, 32, 0, 0, 0, 0);
@@ -43,6 +44,20 @@ void Cell::render(SDL_Renderer* renderer) {
 void Cell::shift(int gridX, int gridY) {
   this->container.x += gridX * this->container.w;
   this->container.y += gridY * this->container.h;
+}
+
+std::pair<int, int> Cell::getPosition() const {
+  std::pair<int, int> position;
+
+  position.first = this->container.x;
+  position.second = this->container.y;
+  
+  return position;
+}
+
+int Cell::getSize() const {
+  // cell should always be square
+  return this->container.w;
 }
 
 void Cell::setPosition(int x, int y) {
