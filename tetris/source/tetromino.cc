@@ -118,9 +118,6 @@ void Tetromino::rotate(SDL_Renderer* renderer) {
 }
 
 bool Tetromino::isWithinBounds(std::pair<int, int> positionDelta, std::pair<int, int> bounds) {
-  std::cout << "T: " << this->getTopBound() << " B: " << this->getBottomBound() <<
-    " L: " << this->getLeftBound() << " R: " << this->getRightBound() << std::endl;
-
   if ((this->getTopBound() + positionDelta.second) < 0) {
     std::cout << "TOP" << std::endl;
     return false;

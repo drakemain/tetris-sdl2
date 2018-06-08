@@ -37,7 +37,7 @@ bool Tetris::init() {
 }
 
 void Tetris::run() {
-  Tetromino tetromino(this->renderer, Shape::S, this->gridUnitSize);
+  this->activeTetromino = new Tetromino(this->renderer, Shape::S, this->gridUnitSize);
   std::cout << "RUN" << std::endl;
   bool isRunning = true;
   SDL_Event event;
@@ -48,38 +48,21 @@ void Tetris::run() {
         isRunning = false;
       } else if (event.type == SDL_KEYDOWN) {
         SDL_Keycode key = event.key.keysym.sym;
-        std::pair<int, int> bounds;
-        bounds.first = gameBoard.w;
-        bounds.second = gameBoard.h;
-        switch(key) {
-          case SDLK_RIGHT:
-          tetromino.shift(1, 0, bounds);
-          break;
-
-          case SDLK_LEFT:
-          tetromino.shift(-1, 0, bounds);
-          break;
-
-          case SDLK_UP:
-          tetromino.shift(0, -1, bounds);
-          break;
-
-          case SDLK_DOWN:
-          tetromino.shift(0, 1, bounds);
-          break;
-
-          case SDLK_SPACE:
-          tetromino.rotate(this->renderer);
-          break;
-        }
+        this->keyboardHandler(key);
       }
     }
-    this->render(tetromino);
+    this->render();
   }
 }
 
 void Tetris::cleanup() {
   std::cout << "CLEANUP" << std::endl;
+
+  for (Tetromino* tetromino : this->placedTetrominos) {
+    delete tetromino;
+  }
+
+  delete activeTetromino;
 
   SDL_RenderClear(this->renderer);
   SDL_DestroyWindow(this->window);
@@ -91,12 +74,62 @@ SDL_Renderer* Tetris::getRenderer() const {
   return this->renderer;
 }
 
-void Tetris::render(Tetromino& tetromino) {
+void Tetris::render() {
   SDL_RenderSetViewport(this->getRenderer(), &this->gameBoard);
 
   SDL_SetRenderDrawColor(this->renderer, 0, 127, 255, 0);
   SDL_RenderClear(this->renderer);
   SDL_SetRenderDrawColor(this->renderer, 255, 127, 255, 0);
-  tetromino.render(this->renderer);
+  for (Tetromino* tetromino : this->placedTetrominos) {
+    tetromino->render(this->renderer);
+  }
+
+  if (this->activeTetromino) {
+    this->activeTetromino->render(this->renderer);
+  }
+
   SDL_RenderPresent(this->renderer);
+}
+
+void Tetris::keyboardHandler(SDL_Keycode key) {
+  std::pair<int, int> bounds;
+  bounds.first = this->gameBoard.w;
+  bounds.second = this->gameBoard.h;
+  switch(key) {
+    case SDLK_RIGHT:
+    this->activeTetromino->shift(1, 0, bounds);
+    break;
+
+    case SDLK_LEFT:
+    this->activeTetromino->shift(-1, 0, bounds);
+    break;
+
+    case SDLK_UP:
+    this->activeTetromino->shift(0, -1, bounds);
+    break;
+
+    case SDLK_DOWN:
+    this->activeTetromino->shift(0, 1, bounds);
+    break;
+
+    case SDLK_SPACE:
+    this->activeTetromino->rotate(this->renderer);
+    break;
+
+    case SDLK_SLASH:
+    this->placeActiveTetromino();
+    this->generateNewActiveTetromino();
+    break;
+  }
+}
+
+void Tetris::placeActiveTetromino() {
+  this->placedTetrominos.push_back(this->activeTetromino);
+  this->activeTetromino = NULL;
+}
+
+void Tetris::generateNewActiveTetromino() {
+  Shape shape = (Shape)(rand() % 7);
+
+  this->activeTetromino = new Tetromino(this->renderer, shape, this->gridUnitSize);
 }
