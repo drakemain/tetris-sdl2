@@ -189,11 +189,11 @@ SDL_Color Tetromino::getColor(Uint8 matrixValue) {
 int Tetromino::getTopBound() {
   if (this->cells.size() == 0) { return -1; }
 
-  int bound = this->cells[0]->getPosition().second;
+  int bound = this->cells[0]->getPixelPosition().second;
   
   for (Cell* cell : this->cells) {
-    if (cell->getPosition().second < bound) {
-      bound = cell->getPosition().second;
+    if (cell->getPixelPosition().second < bound) {
+      bound = cell->getPixelPosition().second;
     }
   }
 
@@ -206,8 +206,8 @@ int Tetromino::getBottomBound() {
   int bound = 0;
 
   for (Cell* cell : this->cells) {
-    if (cell->getPosition().second > bound) {
-      bound = cell->getPosition().second;
+    if (cell->getPixelPosition().second > bound) {
+      bound = cell->getPixelPosition().second;
     }
   }
 
@@ -217,11 +217,11 @@ int Tetromino::getBottomBound() {
 int Tetromino::getLeftBound() {
   if (this->cells.size() == 0) { return -1; }
 
-  int bound = this->cells[0]->getPosition().first;
+  int bound = this->cells[0]->getPixelPosition().first;
   
   for (Cell* cell : this->cells) {
-    if (cell->getPosition().first < bound) {
-      bound = cell->getPosition().first;
+    if (cell->getPixelPosition().first < bound) {
+      bound = cell->getPixelPosition().first;
     }
   }
 
@@ -234,8 +234,8 @@ int Tetromino::getRightBound() {
   int bound = 0;
 
   for (Cell* cell : this->cells) {
-    if (cell->getPosition().first > bound) {
-      bound = cell->getPosition().first;
+    if (cell->getPixelPosition().first > bound) {
+      bound = cell->getPixelPosition().first;
     }
   }
 

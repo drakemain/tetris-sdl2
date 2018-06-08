@@ -46,13 +46,21 @@ void Cell::shift(int gridX, int gridY) {
   this->container.y += gridY * this->container.h;
 }
 
-std::pair<int, int> Cell::getPosition() const {
+std::pair<int, int> Cell::getPixelPosition() const {
   std::pair<int, int> position;
 
   position.first = this->container.x;
   position.second = this->container.y;
   
   return position;
+}
+
+std::pair<int, int> Cell::getBoardPosition() const {
+  std::pair<int, int> position;
+  std::pair<int, int> pixelPosition = this->getPixelPosition();
+
+  position.first = pixelPosition.first / this->getSize();
+  position.second = pixelPosition.second / this->getSize();
 }
 
 int Cell::getSize() const {

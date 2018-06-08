@@ -29,8 +29,8 @@ private:
   Tetromino* activeTetromino;
   std::vector<Tetromino*> placedTetrominos;
 
-  const int WINDOW_WIDTH = 640;
-  const int WINDOW_HEIGHT = 485;
+  const int WINDOW_WIDTH = 1920;
+  const int WINDOW_HEIGHT = 1080;
 
   const int BOARD_GRID_WIDTH = 10;
   const int BOARD_GRID_HEIGHT = 20;

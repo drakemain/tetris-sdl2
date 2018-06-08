@@ -23,13 +23,13 @@ public:
   void shift(int gridX, int gridY);
 
   // Getters
-  std::pair<int, int> getPosition() const;
+  std::pair<int, int> getPixelPosition() const;
+  std::pair<int, int> getBoardPosition() const;
   int getSize() const;
 
 private:
   // Set the position the cell should be rendered at
   void setPosition(int x, int y);
-
   // Used to control the cell's color
   SDL_Texture* cell;
   // Determines size and location to render at
