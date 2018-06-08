@@ -20,6 +20,7 @@ private:
   void keyboardHandler(SDL_Keycode key);
   void placeActiveTetromino();
   void generateNewActiveTetromino();
+  void initGameBoard();
 
 private:
   SDL_Window* window;
@@ -28,8 +29,11 @@ private:
   Tetromino* activeTetromino;
   std::vector<Tetromino*> placedTetrominos;
 
-  const int WIDTH = 640;
-  const int HEIGHT = 480;
+  const int WINDOW_WIDTH = 640;
+  const int WINDOW_HEIGHT = 485;
 
-  const int gridUnitSize = 50;
+  const int BOARD_GRID_WIDTH = 10;
+  const int BOARD_GRID_HEIGHT = 20;
+
+  int gridUnitSize;
 };

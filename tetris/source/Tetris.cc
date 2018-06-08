@@ -11,7 +11,7 @@ bool Tetris::init() {
     return success;
   }
 
-  this->window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->WIDTH, this->HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
+  this->window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->WINDOW_WIDTH, this->WINDOW_HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
 
   if (this->window == NULL) {
     std::cerr << "Failed to create window: " << SDL_GetError() << std::endl;
@@ -27,10 +27,9 @@ bool Tetris::init() {
     return success;
   }
 
-  this->gameBoard.x = 0;
-  this->gameBoard.y = 0;
-  this->gameBoard.w = this->WIDTH;
-  this->gameBoard.h = this->HEIGHT;
+  this->initGameBoard();
+
+  std::cout << this->gameBoard.w << " " << this->gameBoard.h << " " << this->gridUnitSize << std::endl;
 
   std::cout << "Init successful." << std::endl;
   return success;
@@ -135,4 +134,15 @@ void Tetris::generateNewActiveTetromino() {
 
   this->activeTetromino = new Tetromino(this->renderer, shape, this->gridUnitSize);
   this->activeTetromino->shift(xOffset, 0, bounds);
+}
+
+void Tetris::initGameBoard() {
+  this->gameBoard.x = 0;
+  this->gameBoard.y = 0;
+
+  int gridSize = this->WINDOW_HEIGHT / this->BOARD_GRID_HEIGHT;
+  this->gridUnitSize = gridSize;
+
+  this->gameBoard.w = gridSize * this->BOARD_GRID_WIDTH;
+  this->gameBoard.h = gridSize * this->BOARD_GRID_HEIGHT;
 }
