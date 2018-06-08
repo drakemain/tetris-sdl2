@@ -39,7 +39,7 @@ private:
   void initCells(SDL_Renderer* renderer, std::array<std::array<Uint8, 4>, 4> shapeMatrix, int size);
   // Maps Uint8 to RGB struct
   SDL_Color getColor(Uint8);
-  // Finds the relative position within the matrix of bound (TOP, BOTTOM, LEFT, RIGHT)
+  // Finds the position of bound
   int getTopBound();
   int getBottomBound();
   int getLeftBound();

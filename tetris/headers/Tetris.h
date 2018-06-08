@@ -17,6 +17,9 @@ public:
 
 private:
   void render();
+  void keyboardHandler(SDL_Keycode key);
+  void placeActiveTetromino();
+  void generateNewActiveTetromino();
 
 private:
   SDL_Window* window;
@@ -29,9 +32,4 @@ private:
   const int HEIGHT = 480;
 
   const int gridUnitSize = 50;
-
-
-  void keyboardHandler(SDL_Keycode key);
-  void placeActiveTetromino();
-  void generateNewActiveTetromino();
 };

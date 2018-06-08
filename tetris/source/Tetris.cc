@@ -37,7 +37,7 @@ bool Tetris::init() {
 }
 
 void Tetris::run() {
-  this->activeTetromino = new Tetromino(this->renderer, Shape::S, this->gridUnitSize);
+  this->generateNewActiveTetromino();
   std::cout << "RUN" << std::endl;
   bool isRunning = true;
   SDL_Event event;
@@ -130,6 +130,9 @@ void Tetris::placeActiveTetromino() {
 
 void Tetris::generateNewActiveTetromino() {
   Shape shape = (Shape)(rand() % 7);
+  int xOffset = ((this->gameBoard.w / 2) / this->gridUnitSize) - 2;
+  std::pair<int, int> bounds(this->gameBoard.w, this->gameBoard.h);
 
   this->activeTetromino = new Tetromino(this->renderer, shape, this->gridUnitSize);
+  this->activeTetromino->shift(xOffset, 0, bounds);
 }
