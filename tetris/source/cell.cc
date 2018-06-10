@@ -2,8 +2,6 @@
 #include <iostream>
 
 Cell::Cell(SDL_Renderer* renderer, int size) {
-  SDL_CreateRGBSurface(0, 5, 5, 32, 0, 0, 0, 0);
-
   SDL_Surface* surface = SDL_CreateRGBSurface(0, 5, 5, 32, 0, 0, 0, 0);
 
   this->cell = SDL_CreateTextureFromSurface(renderer, surface);
@@ -61,6 +59,8 @@ std::pair<int, int> Cell::getBoardPosition() const {
 
   position.first = pixelPosition.first / this->getSize();
   position.second = pixelPosition.second / this->getSize();
+
+  return position;
 }
 
 int Cell::getSize() const {

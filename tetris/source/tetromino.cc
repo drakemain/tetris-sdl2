@@ -135,6 +135,12 @@ bool Tetromino::isWithinBounds(std::pair<int, int> positionDelta, std::pair<int,
   return true;
 }
 
+void Tetromino::getCells(std::vector<Cell*>& outCells) const {
+  for (Cell* cell : this->cells) {
+    outCells.push_back(cell);
+  }
+}
+
 void Tetromino::initCells(SDL_Renderer* renderer, ShapeMatrix shape, int size) {
   this->cells.clear();
   SDL_Color color;

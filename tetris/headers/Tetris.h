@@ -1,5 +1,6 @@
 #pragma once
 #include "tetris/headers/tetromino.h"
+#include "tetris/headers/board.h"
 #include <SDL.h>
 
 class Tetris {
@@ -18,22 +19,15 @@ public:
 private:
   void render();
   void keyboardHandler(SDL_Keycode key);
-  void placeActiveTetromino();
   void generateNewActiveTetromino();
   void initGameBoard();
 
 private:
   SDL_Window* window;
   SDL_Renderer* renderer;
-  SDL_Rect gameBoard;
+  Board* board;
   Tetromino* activeTetromino;
-  std::vector<Tetromino*> placedTetrominos;
 
   const int WINDOW_WIDTH = 1920;
   const int WINDOW_HEIGHT = 1080;
-
-  const int BOARD_GRID_WIDTH = 10;
-  const int BOARD_GRID_HEIGHT = 20;
-
-  int gridUnitSize;
 };

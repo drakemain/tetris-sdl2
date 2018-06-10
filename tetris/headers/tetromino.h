@@ -33,6 +33,7 @@ public:
   
   // Getters
   ShapeMatrix getShapeMatrix() const;
+  void getCells(std::vector<Cell*>& outCells) const;
 
 private:
   // Initializes the container for the cell pointers
