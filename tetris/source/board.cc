@@ -1,6 +1,7 @@
 #include "tetris/headers/board.h"
+#include <iostream>
 
-Board::Board(int heightBound, SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+Board::Board(int heightBound) {
   this->board.x = 0;
   this->board.y = 0;
 
@@ -9,10 +10,10 @@ Board::Board(int heightBound, SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b,
   this->board.w = this->gridUnitPixels * this->GRID_WIDTH;
   this->board.h = this->gridUnitPixels * this->GRID_HEIGHT;
 
-  SDL_Surface* surface = SDL_CreateRGBSurface(0, this->board.w, this->board.h, 32, 0, 0, 0, 0);
-  SDL_FillRect(surface, NULL, SDL_MapRGBA(surface->format, r, g, b, a));
-  this->background = SDL_CreateTextureFromSurface(renderer, surface);
-  SDL_FreeSurface(surface);
+  this->grid.resize(this->GRID_HEIGHT);
+  for (int i = 0; i < this->GRID_HEIGHT; ++i) {
+    this->grid[i].resize(this->GRID_WIDTH);
+  }
 }
 
 Board::~Board() {
@@ -23,12 +24,23 @@ Board::~Board() {
 
 void Board::placeTetromino(Tetromino* tetromino) {
   this->placedTetrominos.push_back(tetromino);
+
+  std::vector<Cell*> tetrominoCells;
+  tetromino->getCells(tetrominoCells);
+
+  for (Cell* cell : tetrominoCells) {
+    std::pair<int, int> position = cell->getBoardPosition();
+    this->grid[position.second][position.first] = cell;
+  }
 }
 
 void Board::render(SDL_Renderer* renderer) {
-  SDL_RenderCopy(renderer, this->background, NULL, &this->board);
   SDL_RenderSetViewport(renderer, &this->board);
+  SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
+  SDL_RenderFillRect(renderer, NULL);
 
+  SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
   for (Tetromino* placedTetromino : this->placedTetrominos) {
     placedTetromino->render(renderer);
   }

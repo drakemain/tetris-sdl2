@@ -27,7 +27,7 @@ bool Tetris::init() {
     return success;
   }
 
-  this->board = new Board(this->WINDOW_HEIGHT, this->renderer, 255, 255, 255, 10);
+  this->board = new Board(this->WINDOW_HEIGHT);
 
   // std::cout << this->gameBoard.w << " " << this->gameBoard.h << " " << this->gridUnitSize << std::endl;
 
