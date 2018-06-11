@@ -84,26 +84,14 @@ void Tetromino::render(SDL_Renderer* renderer) {
   }
 }
 
-bool Tetromino::shift(int gridUnitsX, int gridUnitsY, std::pair<int, int> bounds) {
-  std::pair<int, int> positionDelta;
-  positionDelta.first = gridUnitsX * this->cellSize;
-  positionDelta.second = gridUnitsY * this->cellSize;
-
-  if (!this->isWithinBounds(positionDelta, bounds)) {
-    return false;
-  }
-
-  this->position.first += gridUnitsX;
-  this->position.second += gridUnitsY;
-
+void Tetromino::shift(int gridUnitsX, int gridUnitsY) {
   for (Cell* cell : this->cells) {
     cell->shift(gridUnitsX, gridUnitsY);
   }
-
-  return true;
 }
 
 void Tetromino::rotate(SDL_Renderer* renderer) {
+  // TODO: Eliminate requiring renderer
   std::array<std::array<Uint8, 4>, 4> newShapeMatrix;
 
   for (std::size_t currentRow = 0; currentRow < this->shapeMatrix.size(); ++currentRow) {
@@ -115,24 +103,6 @@ void Tetromino::rotate(SDL_Renderer* renderer) {
   this->shapeMatrix = newShapeMatrix;
 
   this->initCells(renderer, this->shapeMatrix, this->cellSize);
-}
-
-bool Tetromino::isWithinBounds(std::pair<int, int> positionDelta, std::pair<int, int> bounds) {
-  if ((this->getTopBound() + positionDelta.second) < 0) {
-    std::cout << "TOP" << std::endl;
-    return false;
-  } else if ((this->getBottomBound() + positionDelta.second) > bounds.second) {
-    std::cout << "BOTTOM" << std::endl;
-    return false;
-  } else if ((this->getLeftBound() + positionDelta.first) < 0) {
-    std::cout << "LEFT" << std::endl;
-    return false;
-  } else if ((this->getRightBound() + positionDelta.first) > bounds.first) {
-    std::cout << "RIGHT" << std::endl;
-    return false;
-  }
-
-  return true;
 }
 
 void Tetromino::getCells(std::vector<Cell*>& outCells) const {

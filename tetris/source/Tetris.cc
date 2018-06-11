@@ -36,7 +36,7 @@ bool Tetris::init() {
 }
 
 void Tetris::run() {
-  this->generateNewActiveTetromino();
+  this->board->generateNewActiveTetromino(this->renderer);
   std::cout << "RUN" << std::endl;
   bool isRunning = true;
   SDL_Event event;
@@ -58,7 +58,6 @@ void Tetris::cleanup() {
   std::cout << "CLEANUP" << std::endl;
 
   delete this->board;
-  delete this->activeTetromino;
 
   SDL_RenderClear(this->renderer);
   SDL_DestroyWindow(this->window);
@@ -76,10 +75,6 @@ void Tetris::render() {
 
   this->board->render(this->renderer);
 
-  if (this->activeTetromino) {
-    this->activeTetromino->render(this->renderer);
-  }
-
   SDL_RenderPresent(this->renderer);
 }
 
@@ -90,41 +85,27 @@ void Tetris::keyboardHandler(SDL_Keycode key) {
 
   switch(key) {
     case SDLK_RIGHT:
-    this->activeTetromino->shift(1, 0, bounds);
+    this->board->shiftActiveTetromino(1, 0);
     break;
 
     case SDLK_LEFT:
-    this->activeTetromino->shift(-1, 0, bounds);
+    this->board->shiftActiveTetromino(-1, 0);
     break;
 
     case SDLK_UP:
-    this->activeTetromino->shift(0, -1, bounds);
+    this->board->shiftActiveTetromino(0, -1);
     break;
 
     case SDLK_DOWN:
-    this->activeTetromino->shift(0, 1, bounds);
+    this->board->shiftActiveTetromino(0, 1);
     break;
 
     case SDLK_SPACE:
-    this->activeTetromino->rotate(this->renderer);
+    this->board->rotateActiveTetromino(this->renderer);
     break;
 
     case SDLK_SLASH:
-    this->board->placeTetromino(this->activeTetromino);
-    this->generateNewActiveTetromino();
+    this->board->generateNewActiveTetromino(this->renderer);
     break;
   }
-}
-
-void Tetris::generateNewActiveTetromino() {
-  const int boardWidth = this->board->getWidth();
-  const int boardHeight = this->board->getHeight();
-  const int gridUnitPixels = this->board->getGridUnitPixels();
-
-  Shape shape = (Shape)(rand() % 7);
-  int xOffset = ((boardWidth / 2) / gridUnitPixels) - 2;
-  std::pair<int, int> bounds(boardWidth, boardHeight);
-
-  this->activeTetromino = new Tetromino(this->renderer, shape, gridUnitPixels);
-  this->activeTetromino->shift(xOffset, 0, bounds);
 }

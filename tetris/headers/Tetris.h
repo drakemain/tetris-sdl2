@@ -19,14 +19,12 @@ public:
 private:
   void render();
   void keyboardHandler(SDL_Keycode key);
-  void generateNewActiveTetromino();
   void initGameBoard();
 
 private:
   SDL_Window* window;
   SDL_Renderer* renderer;
   Board* board;
-  Tetromino* activeTetromino;
 
   const int WINDOW_WIDTH = 1920;
   const int WINDOW_HEIGHT = 1080;

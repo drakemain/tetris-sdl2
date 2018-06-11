@@ -25,11 +25,9 @@ public:
   // Renders the tetromino's cells
   void render(SDL_Renderer* renderer);
   // Adjusts the position of each of the cells
-  bool shift(int gridUnitsX, int gridUnitsY, std::pair<int, int> bounds);
+  void shift(int gridUnitsX, int gridUnitsY);
   // Rotate the cells within the matrix CW 90 degrees
   void rotate(SDL_Renderer* renderer);
-
-  bool isWithinBounds(std::pair<int, int> positionDelta, std::pair<int, int> bounds);
   
   // Getters
   ShapeMatrix getShapeMatrix() const;
