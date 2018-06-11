@@ -44,6 +44,11 @@ void Cell::shift(int gridX, int gridY) {
   this->container.y += gridY * this->container.h;
 }
 
+void Cell::setPosition(int x, int y) {
+  this->container.x = x * this->container.w;
+  this->container.y = y * this->container.h;
+}
+
 std::pair<int, int> Cell::getPixelPosition() const {
   std::pair<int, int> position;
 
@@ -66,9 +71,4 @@ std::pair<int, int> Cell::getBoardPosition() const {
 int Cell::getSize() const {
   // cell should always be square
   return this->container.w;
-}
-
-void Cell::setPosition(int x, int y) {
-  this->container.x = x;
-  this->container.y = y;
 }

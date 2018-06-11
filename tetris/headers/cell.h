@@ -21,6 +21,8 @@ public:
 
   // Adjusts the cell position
   void shift(int gridX, int gridY);
+  // Sets new position
+  void setPosition(int gridx, int gridY);
 
   // Getters
   std::pair<int, int> getPixelPosition() const;
@@ -28,8 +30,6 @@ public:
   int getSize() const;
 
 private:
-  // Set the position the cell should be rendered at
-  void setPosition(int x, int y);
   // Used to control the cell's color
   SDL_Texture* cell;
   // Determines size and location to render at

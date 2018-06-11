@@ -9,7 +9,7 @@ public:
 
   void render(SDL_Renderer* renderer);
   bool shiftActiveTetromino(int x, int y);
-  bool rotateActiveTetromino(SDL_Renderer* renderer);
+  bool rotateActiveTetromino();
   void generateNewActiveTetromino(SDL_Renderer* renderer);
 
   int getWidth() const;

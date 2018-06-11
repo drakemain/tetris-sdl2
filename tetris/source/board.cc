@@ -49,10 +49,10 @@ bool Board::shiftActiveTetromino(int x, int y) {
   return false;
 }
 
-bool Board::rotateActiveTetromino(SDL_Renderer* renderer) {
+bool Board::rotateActiveTetromino() {
   if (this->activeTetromino == NULL) { return false; }
 
-  this->activeTetromino->rotate(renderer);
+  this->activeTetromino->rotate();
   return true;
 }
 

@@ -27,7 +27,7 @@ public:
   // Adjusts the position of each of the cells
   void shift(int gridUnitsX, int gridUnitsY);
   // Rotate the cells within the matrix CW 90 degrees
-  void rotate(SDL_Renderer* renderer);
+  void rotate();
   
   // Getters
   ShapeMatrix getShapeMatrix() const;
@@ -38,19 +38,21 @@ private:
   void initCells(SDL_Renderer* renderer, std::array<std::array<Uint8, 4>, 4> shapeMatrix, int size);
   // Maps Uint8 to RGB struct
   SDL_Color getColor(Uint8);
-  // Finds the position of bound
-  int getTopBound();
-  int getBottomBound();
-  int getLeftBound();
-  int getRightBound();
+  // Finds the edges of the tetromino
+  int getTopEdge();
+  int getBottomEdge();
+  int getLeftEdge();
+  int getRightEdge();
+  int getMinMatrixSize();
 
 private:
   // Pointers to the tetromino's cells
   std::vector<Cell*> cells;
-  // Matrix representing tetromino shape
   ShapeMatrix shapeMatrix;
   // Square size of cells
-  int cellSize;
+  const int cellSize;
   // Position of the tetromino which cells are positioned relative to
   std::pair<int, int> position;
+  // Smallest square matrix size the tetromino can fit int. Used for rotation.
+  int size;
 };

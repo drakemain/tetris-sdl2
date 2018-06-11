@@ -101,7 +101,7 @@ void Tetris::keyboardHandler(SDL_Keycode key) {
     break;
 
     case SDLK_SPACE:
-    this->board->rotateActiveTetromino(this->renderer);
+    this->board->rotateActiveTetromino();
     break;
 
     case SDLK_SLASH:

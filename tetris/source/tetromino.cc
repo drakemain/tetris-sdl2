@@ -66,10 +66,10 @@ Tetromino::Tetromino(SDL_Renderer* renderer, Shape shape, int cellSize)
     case Shape::T: shapeMatrix = T; break;
     case Shape::Z: shapeMatrix = Z; break;
   }
-
-  this->shapeMatrix = shapeMatrix;
   
-  this->initCells(renderer, this->shapeMatrix, cellSize);
+  this->initCells(renderer, shapeMatrix, cellSize);
+
+  this->size = this->getMinMatrixSize();
 }
 
 Tetromino::~Tetromino() {
@@ -85,24 +85,22 @@ void Tetromino::render(SDL_Renderer* renderer) {
 }
 
 void Tetromino::shift(int gridUnitsX, int gridUnitsY) {
+  this->position.first += gridUnitsX;
+  this->position.second += gridUnitsY;
+
   for (Cell* cell : this->cells) {
     cell->shift(gridUnitsX, gridUnitsY);
   }
 }
 
-void Tetromino::rotate(SDL_Renderer* renderer) {
-  // TODO: Eliminate requiring renderer
-  std::array<std::array<Uint8, 4>, 4> newShapeMatrix;
-
-  for (std::size_t currentRow = 0; currentRow < this->shapeMatrix.size(); ++currentRow) {
-    for (std::size_t currentColumn = 0; currentColumn < this->shapeMatrix[currentRow].size(); ++currentColumn) {
-      newShapeMatrix[currentColumn][this->shapeMatrix.size() - currentRow - 1] = this->shapeMatrix[currentRow][currentColumn];
-    }
+void Tetromino::rotate() {
+  for (Cell* cell : this->cells) {
+    std::pair<int, int> currentPosition = cell->getBoardPosition();
+    std::pair<int, int> relativePosition;
+    relativePosition.first = currentPosition.first - this->position.first;
+    relativePosition.second = currentPosition.second - this->position.second;
+    cell->setPosition(this->size - 1 - relativePosition.second + this->position.first, relativePosition.first + this->position.second);
   }
-
-  this->shapeMatrix = newShapeMatrix;
-
-  this->initCells(renderer, this->shapeMatrix, this->cellSize);
 }
 
 void Tetromino::getCells(std::vector<Cell*>& outCells) const {
@@ -162,58 +160,90 @@ SDL_Color Tetromino::getColor(Uint8 matrixValue) {
   return color;
 }
 
-int Tetromino::getTopBound() {
+int Tetromino::getTopEdge() {
   if (this->cells.size() == 0) { return -1; }
 
-  int bound = this->cells[0]->getPixelPosition().second;
+  int edge = this->cells[0]->getPixelPosition().second;
   
   for (Cell* cell : this->cells) {
-    if (cell->getPixelPosition().second < bound) {
-      bound = cell->getPixelPosition().second;
+    if (cell->getPixelPosition().second < edge) {
+      edge = cell->getPixelPosition().second;
     }
   }
 
-  return bound;
+  return edge;
 }
 
-int Tetromino::getBottomBound() {
+int Tetromino::getBottomEdge() {
   if (this->cells.size() == 0) { return -1; }
   
-  int bound = 0;
+  int edge = 0;
 
   for (Cell* cell : this->cells) {
-    if (cell->getPixelPosition().second > bound) {
-      bound = cell->getPixelPosition().second;
+    if (cell->getPixelPosition().second > edge) {
+      edge = cell->getPixelPosition().second;
     }
   }
 
-  return bound + this->cellSize;
+  return edge + this->cellSize;
 }
 
-int Tetromino::getLeftBound() {
+int Tetromino::getLeftEdge() {
   if (this->cells.size() == 0) { return -1; }
 
-  int bound = this->cells[0]->getPixelPosition().first;
+  int edge = this->cells[0]->getPixelPosition().first;
   
   for (Cell* cell : this->cells) {
-    if (cell->getPixelPosition().first < bound) {
-      bound = cell->getPixelPosition().first;
+    if (cell->getPixelPosition().first < edge) {
+      edge = cell->getPixelPosition().first;
     }
   }
 
-  return bound;
+  return edge;
 }
 
-int Tetromino::getRightBound() {
+int Tetromino::getRightEdge() {
   if (this->cells.size() == 0) { return -1; }
   
-  int bound = 0;
+  int edge = 0;
 
   for (Cell* cell : this->cells) {
-    if (cell->getPixelPosition().first > bound) {
-      bound = cell->getPixelPosition().first;
+    if (cell->getPixelPosition().first > edge) {
+      edge = cell->getPixelPosition().first;
     }
   }
 
-  return bound + this->cellSize;
+  return edge + this->cellSize;
+}
+
+int Tetromino::getMinMatrixSize() {
+  int minXCell = this->cells[0]->getBoardPosition().first;
+  int maxXCell = this->cells[0]->getBoardPosition().first;
+  int minYCell = this->cells[0]->getBoardPosition().second;
+  int maxYCell = this->cells[0]->getBoardPosition().second;
+  
+  for (Cell* cell : this->cells) {
+    std::pair<int, int> position = cell->getBoardPosition();
+
+    std::cout << position.first << " " << position.second << std::endl;
+
+    if (position.first < minXCell) { minXCell = position.first; }
+    if (position.first > maxXCell) { maxXCell = position.first; }
+    if (position.second < minYCell) { minYCell = position.second; }
+    if (position.second > maxYCell) { maxYCell = position.second; }
+  }
+
+  std::cout << "mX: " << minXCell << " " << maxXCell;
+  std::cout << " mY: " << minYCell << " " << maxYCell << std::endl;
+
+  int xLength = maxXCell - minXCell + 1;
+  int yLength = maxYCell - minYCell + 1;
+
+  std::cout << "X: " << xLength << " " << "Y: " << yLength << std::endl;
+
+  if (xLength > yLength) {
+    return xLength;
+  } else {
+    return yLength;
+  }
 }
