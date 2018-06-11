@@ -1,5 +1,4 @@
 #include "tetris/headers/board.h"
-#include <iostream>
 
 Board::Board(int heightBound) {
   this->board.x = 0;
@@ -14,6 +13,8 @@ Board::Board(int heightBound) {
   for (int i = 0; i < this->GRID_HEIGHT; ++i) {
     this->grid[i].resize(this->GRID_WIDTH);
   }
+
+  srand(time(0));
 }
 
 Board::~Board() {
@@ -86,14 +87,12 @@ bool Board::isValidMove(Tetromino* tetromino, int xDelta, int yDelta) {
     bool isWithinBounds = this->boundsCheck(cell, xDelta, yDelta);
     
     if (!isWithinBounds) {
-      std::cout << "OOB" << std::endl;
       return false;
     }
 
     bool willCollide = this->collisionCheck(cell, xDelta, yDelta);
 
     if (willCollide) {
-      std::cout << "Coll" << std::endl;
       return false;
     }
   }
@@ -130,7 +129,6 @@ bool Board::collisionCheck(Cell* cell, int xDelta, int yDelta) {
 }
 
 Tetromino* Board::spawnRandomTetromino(SDL_Renderer* renderer) {
-  std::cout << "Spawning a tetromino!" << std::endl;
   Shape shape = (Shape)(rand() % 7);
   return new Tetromino(renderer, shape, gridUnitPixels);
 }

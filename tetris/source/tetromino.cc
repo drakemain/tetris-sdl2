@@ -1,5 +1,4 @@
 #include "tetris/headers/tetromino.h"
-#include <iostream>
 
 const ShapeMatrix I =
 {
@@ -225,21 +224,14 @@ int Tetromino::getMinMatrixSize() {
   for (Cell* cell : this->cells) {
     std::pair<int, int> position = cell->getBoardPosition();
 
-    std::cout << position.first << " " << position.second << std::endl;
-
     if (position.first < minXCell) { minXCell = position.first; }
     if (position.first > maxXCell) { maxXCell = position.first; }
     if (position.second < minYCell) { minYCell = position.second; }
     if (position.second > maxYCell) { maxYCell = position.second; }
   }
 
-  std::cout << "mX: " << minXCell << " " << maxXCell;
-  std::cout << " mY: " << minYCell << " " << maxYCell << std::endl;
-
   int xLength = maxXCell - minXCell + 1;
   int yLength = maxYCell - minYCell + 1;
-
-  std::cout << "X: " << xLength << " " << "Y: " << yLength << std::endl;
 
   if (xLength > yLength) {
     return xLength;
