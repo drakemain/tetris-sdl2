@@ -1,6 +1,7 @@
 #include "tetris/headers/Tetris.h"
 #include <SDL_image.h>
 #include <iostream>
+#include <cmath>
 
 bool Tetris::init() {
   std::cout << "INIT" << std::endl;
@@ -28,20 +29,28 @@ bool Tetris::init() {
   }
 
   this->board = new Board(this->WINDOW_HEIGHT);
-
-  // std::cout << this->gameBoard.w << " " << this->gameBoard.h << " " << this->gridUnitSize << std::endl;
-
   std::cout << "Init successful." << std::endl;
   return success;
 }
 
 void Tetris::run() {
+  const int frameCap = 60;
+  const float frameTime = 1000 / frameCap;
+
+  float runTime = 0;
+  float deltaTime = 0;
+  float lastFrameTime = 0;
+
   this->board->generateNewActiveTetromino(this->renderer);
   std::cout << "RUN" << std::endl;
   bool isRunning = true;
   SDL_Event event;
 
   while(isRunning) {
+    runTime = SDL_GetTicks();
+    deltaTime += runTime - lastFrameTime;
+    lastFrameTime = runTime;
+
     if (SDL_PollEvent(&event) > 0) {
       if (event.type == SDL_QUIT) {
         isRunning = false;
@@ -50,7 +59,12 @@ void Tetris::run() {
         this->keyboardHandler(key);
       }
     }
-    this->render();
+
+    if (deltaTime >= frameTime) {
+      std::cout << pow(deltaTime/1000, -1.f) << std::endl;
+      deltaTime = 0;
+      this->render();
+    }
   }
 }
 
