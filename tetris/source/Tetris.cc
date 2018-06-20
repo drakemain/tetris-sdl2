@@ -1,7 +1,6 @@
 #include "tetris/headers/Tetris.h"
 #include <SDL_image.h>
 #include <iostream>
-#include <cmath>
 
 bool Tetris::init() {
   std::cout << "INIT" << std::endl;
@@ -35,11 +34,14 @@ bool Tetris::init() {
 
 void Tetris::run() {
   const int frameCap = 60;
-  const float frameTime = 1000 / frameCap;
+  const float minFrameTime = 1000.f / frameCap;
 
-  float runTime = 0;
-  float deltaTime = 0;
-  float lastFrameTime = 0;
+  uint runTime = 0;
+  uint deltaTime = 0;
+  uint timeSinceLastFrame = 0;
+  uint lastTickTime = 0;
+  uint dropRate = 1000;
+  uint timeSinceLastDrop = 0;
 
   this->board->generateNewActiveTetromino(this->renderer);
   std::cout << "RUN" << std::endl;
@@ -48,8 +50,8 @@ void Tetris::run() {
 
   while(isRunning) {
     runTime = SDL_GetTicks();
-    deltaTime += runTime - lastFrameTime;
-    lastFrameTime = runTime;
+    deltaTime = runTime - lastTickTime;
+    lastTickTime = runTime;
 
     if (SDL_PollEvent(&event) > 0) {
       if (event.type == SDL_QUIT) {
@@ -60,11 +62,21 @@ void Tetris::run() {
       }
     }
 
-    if (deltaTime >= frameTime) {
-      std::cout << pow(deltaTime/1000, -1.f) << std::endl;
-      deltaTime = 0;
-      this->render();
+    if (timeSinceLastDrop >= dropRate) {
+      timeSinceLastDrop = 0;
+      this->board->shiftActiveTetromino(0, 1);
+    } else {
+      timeSinceLastDrop += deltaTime;
     }
+
+    if (timeSinceLastFrame >= minFrameTime) {
+      timeSinceLastFrame = 0;
+      this->render();
+    } else {
+      timeSinceLastFrame += deltaTime;
+    }
+
+    deltaTime = 0;
   }
 }
 
