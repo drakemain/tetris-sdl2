@@ -16,6 +16,8 @@ public:
   int getHeight() const;
   int getGridUnitPixels() const;
 
+  void tick(uint deltaTime);
+
 private:
   bool isValidMove(Tetromino* tetromino, int xDelta, int yDelta);
   bool boundsCheck(Cell* cell, int xDelta, int yDelta);
@@ -30,4 +32,7 @@ private:
   Tetromino* activeTetromino;
   std::vector<Tetromino*> placedTetrominos;
   std::vector<std::vector<Cell*>> grid;
+
+  int dropRate = 1000;
+  int timeSinceLastDrop = 0;
 };

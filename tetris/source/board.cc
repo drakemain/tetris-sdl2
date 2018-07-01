@@ -79,6 +79,15 @@ int Board::getGridUnitPixels() const {
   return this->gridUnitPixels;
 }
 
+void Board::tick(uint deltaTime) {
+  this->timeSinceLastDrop += deltaTime;
+  
+  if (this->timeSinceLastDrop >= this->dropRate) {
+    this->timeSinceLastDrop = 0;
+    this->shiftActiveTetromino(0, 1);
+  }
+}
+
 bool Board::isValidMove(Tetromino* tetromino, int xDelta, int yDelta) {
   std::vector<Cell*> cells;
   tetromino->getCells(cells);

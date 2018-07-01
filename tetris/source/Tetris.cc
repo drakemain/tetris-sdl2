@@ -40,8 +40,6 @@ void Tetris::run() {
   uint deltaTime = 0;
   uint timeSinceLastFrame = 0;
   uint lastTickTime = 0;
-  uint dropRate = 1000;
-  uint timeSinceLastDrop = 0;
 
   this->board->generateNewActiveTetromino(this->renderer);
   std::cout << "RUN" << std::endl;
@@ -62,12 +60,7 @@ void Tetris::run() {
       }
     }
 
-    if (timeSinceLastDrop >= dropRate) {
-      timeSinceLastDrop = 0;
-      this->board->shiftActiveTetromino(0, 1);
-    } else {
-      timeSinceLastDrop += deltaTime;
-    }
+    this->board->tick(deltaTime);
 
     if (timeSinceLastFrame >= minFrameTime) {
       timeSinceLastFrame = 0;
@@ -75,8 +68,6 @@ void Tetris::run() {
     } else {
       timeSinceLastFrame += deltaTime;
     }
-
-    deltaTime = 0;
   }
 }
 
