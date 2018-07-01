@@ -44,22 +44,23 @@ void Tetris::run() {
   this->board->generateNewActiveTetromino(this->renderer);
   std::cout << "RUN" << std::endl;
   bool isRunning = true;
-  SDL_Event event;
+  // SDL_Event event;
 
   while(isRunning) {
     runTime = SDL_GetTicks();
     deltaTime = runTime - lastTickTime;
     lastTickTime = runTime;
 
-    if (SDL_PollEvent(&event) > 0) {
-      if (event.type == SDL_QUIT) {
-        isRunning = false;
-      } else if (event.type == SDL_KEYDOWN) {
-        SDL_Keycode key = event.key.keysym.sym;
-        this->keyboardHandler(key);
+    if (this->input.poll()) {
+      switch(this->input.getType()) {
+        case SDL_QUIT:
+        isRunning = false; break;
+
+        case SDL_KEYDOWN:
+        this->keyboardHandler(this->input.getKeyCode()); break;
       }
     }
-
+    
     this->board->tick(deltaTime);
 
     if (timeSinceLastFrame >= minFrameTime) {
@@ -96,10 +97,6 @@ void Tetris::render() {
 }
 
 void Tetris::keyboardHandler(SDL_Keycode key) {
-  std::pair<int, int> bounds;
-  bounds.first = this->board->getWidth();
-  bounds.second = this->board->getHeight();
-
   switch(key) {
     case SDLK_RIGHT:
     this->board->shiftActiveTetromino(1, 0);

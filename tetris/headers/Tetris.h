@@ -1,6 +1,7 @@
 #pragma once
 #include "tetris/headers/tetromino.h"
 #include "tetris/headers/board.h"
+#include "tetris/headers/input.h"
 #include <SDL.h>
 
 class Tetris {
@@ -25,6 +26,7 @@ private:
   SDL_Window* window;
   SDL_Renderer* renderer;
   Board* board;
+  Input input;
 
   const int WINDOW_WIDTH = 1280;
   const int WINDOW_HEIGHT = 1024;
