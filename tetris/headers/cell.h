@@ -1,20 +1,21 @@
 #pragma once
+#include "tetris/headers/Base.h"
 #include <SDL.h>
 
-class Cell {
+class Cell : public Base {
 public:
   // Constructor for default color (black)
-  Cell(SDL_Renderer* renderer, int size);
+  Cell(int size);
   // Constructor for custom color
-  Cell(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b, int size);
+  Cell(Uint8 r, Uint8 g, Uint8 b, int size);
   // Cleanup on deletion
   ~Cell();
 
   // Set a new color by replacing the current texture
-  void setColor(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b);
+  void setColor(Uint8 r, Uint8 g, Uint8 b);
 
   // Render the cell to the render target
-  void render(SDL_Renderer* renderer);
+  void render();
 
   // Set the size of the cell
   void setDimensions(int w, int h);

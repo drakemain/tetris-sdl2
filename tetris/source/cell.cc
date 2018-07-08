@@ -1,10 +1,10 @@
 #include "tetris/headers/cell.h"
 #include <iostream>
 
-Cell::Cell(SDL_Renderer* renderer, int size) {
+Cell::Cell(int size) {
   SDL_Surface* surface = SDL_CreateRGBSurface(0, 5, 5, 32, 0, 0, 0, 0);
 
-  this->cell = SDL_CreateTextureFromSurface(renderer, surface);
+  this->cell = SDL_CreateTextureFromSurface(this->getRenderer(), surface);
   SDL_FreeSurface(surface);
 
   this->container.x = 0;
@@ -13,8 +13,8 @@ Cell::Cell(SDL_Renderer* renderer, int size) {
   this->container.h = size;
 }
 
-Cell::Cell(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b, int size) {
-  this->setColor(renderer, r, g, b);
+Cell::Cell(Uint8 r, Uint8 g, Uint8 b, int size) {
+  this->setColor(r, g, b);
 
   this->container.x = 0;
   this->container.y = 0;
@@ -26,17 +26,17 @@ Cell::~Cell() {
   SDL_DestroyTexture(this->cell);
 }
 
-void Cell::setColor(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b) {
+void Cell::setColor(Uint8 r, Uint8 g, Uint8 b) {
   SDL_Surface* surface = SDL_CreateRGBSurface(0, 5, 5, 32, 0, 0, 0, 0);
   SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, r, g, b));
   
   SDL_DestroyTexture(this->cell);
-  this->cell = SDL_CreateTextureFromSurface(renderer, surface);
+  this->cell = SDL_CreateTextureFromSurface(this->getRenderer(), surface);
   SDL_FreeSurface(surface);
 }
 
-void Cell::render(SDL_Renderer* renderer) {
-  SDL_RenderCopy(renderer, this->cell, NULL, &this->container);
+void Cell::render() {
+  SDL_RenderCopy(this->getRenderer(), this->cell, NULL, &this->container);
 }
 
 void Cell::shift(int gridX, int gridY) {

@@ -10,7 +10,7 @@ public:
   void render(SDL_Renderer* renderer);
   bool shiftActiveTetromino(int x, int y);
   bool rotateActiveTetromino();
-  void generateNewActiveTetromino(SDL_Renderer* renderer);
+  void generateNewActiveTetromino();
 
   int getWidth() const;
   int getHeight() const;
@@ -22,7 +22,7 @@ private:
   bool isValidMove(Tetromino* tetromino, int xDelta, int yDelta);
   bool boundsCheck(Cell* cell, int xDelta, int yDelta);
   bool collisionCheck(Cell* cell, int xDelta, int yDelta);
-  Tetromino* spawnRandomTetromino(SDL_Renderer* renderer);
+  Tetromino* spawnRandomTetromino();
   void placeActiveTetromino();
 
   SDL_Rect board;

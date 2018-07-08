@@ -41,7 +41,7 @@ void Tetris::run() {
   uint timeSinceLastFrame = 0;
   uint lastTickTime = 0;
 
-  this->board->generateNewActiveTetromino(this->getRenderer());
+  this->board->generateNewActiveTetromino();
   std::cout << "RUN" << std::endl;
   bool isRunning = true;
   // SDL_Event event;
@@ -77,8 +77,8 @@ void Tetris::cleanup() {
 
   delete this->board;
 
-  SDL_RenderClear(this->getRenderer());
-  SDL_DestroyWindow(this->getWindow());
+  this->clearRenderer();
+  this->destroyWindow();
 
   SDL_Quit();
 }
@@ -115,7 +115,7 @@ void Tetris::keyboardHandler(SDL_Keycode key) {
     break;
 
     case SDLK_SLASH:
-    this->board->generateNewActiveTetromino(this->getRenderer());
+    this->board->generateNewActiveTetromino();
     break;
   }
 }

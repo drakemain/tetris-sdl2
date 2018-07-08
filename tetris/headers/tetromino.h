@@ -18,12 +18,12 @@ enum class Shape {
 class Tetromino {
 public:
   // Constructor; Needs render target
-  Tetromino(SDL_Renderer* renderer, Shape shape, int cellSize);
+  Tetromino(Shape shape, int cellSize);
   // Delete each cell and vector container
   ~Tetromino();
 
   // Renders the tetromino's cells
-  void render(SDL_Renderer* renderer);
+  void render();
   // Adjusts the position of each of the cells
   void shift(int gridUnitsX, int gridUnitsY);
   // Rotate the cells within the matrix CW 90 degrees
@@ -35,7 +35,7 @@ public:
 
 private:
   // Initializes the container for the cell pointers
-  void initCells(SDL_Renderer* renderer, std::array<std::array<Uint8, 4>, 4> shapeMatrix, int size);
+  void initCells(std::array<std::array<Uint8, 4>, 4> shapeMatrix, int size);
   // Maps Uint8 to RGB struct
   SDL_Color getColor(Uint8);
   // Finds the edges of the tetromino

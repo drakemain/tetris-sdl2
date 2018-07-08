@@ -31,11 +31,11 @@ void Board::render(SDL_Renderer* renderer) {
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
   SDL_RenderFillRect(renderer, NULL);
 
-  this->activeTetromino->render(renderer);
+  this->activeTetromino->render();
 
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
   for (Tetromino* placedTetromino : this->placedTetrominos) {
-    placedTetromino->render(renderer);
+    placedTetromino->render();
   }
 }
 
@@ -57,13 +57,13 @@ bool Board::rotateActiveTetromino() {
   return true;
 }
 
-void Board::generateNewActiveTetromino(SDL_Renderer* renderer) {
+void Board::generateNewActiveTetromino() {
   const int boardWidth = this->getWidth();
   const int gridUnitPixels = this->getGridUnitPixels();
   const int xOffset = ((boardWidth / 2) / gridUnitPixels) - 2;
 
   this->placeActiveTetromino();
-  this->activeTetromino = this->spawnRandomTetromino(renderer);
+  this->activeTetromino = this->spawnRandomTetromino();
   this->activeTetromino->shift(xOffset, 0);
 }
 
@@ -137,9 +137,9 @@ bool Board::collisionCheck(Cell* cell, int xDelta, int yDelta) {
   return true;
 }
 
-Tetromino* Board::spawnRandomTetromino(SDL_Renderer* renderer) {
+Tetromino* Board::spawnRandomTetromino() {
   Shape shape = (Shape)(rand() % 7);
-  return new Tetromino(renderer, shape, gridUnitPixels);
+  return new Tetromino(shape, gridUnitPixels);
 }
 
 void Board::placeActiveTetromino() {

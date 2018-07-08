@@ -50,7 +50,7 @@ const ShapeMatrix Z = {
   std::array<Uint8, 4>{0,0,0,0}
 };
 
-Tetromino::Tetromino(SDL_Renderer* renderer, Shape shape, int cellSize)
+Tetromino::Tetromino(Shape shape, int cellSize)
 :cellSize(cellSize) {
   this->position.first = 0;
   this->position.second = 0;
@@ -66,7 +66,7 @@ Tetromino::Tetromino(SDL_Renderer* renderer, Shape shape, int cellSize)
     case Shape::Z: shapeMatrix = Z; break;
   }
   
-  this->initCells(renderer, shapeMatrix, cellSize);
+  this->initCells(shapeMatrix, cellSize);
 
   this->size = this->getMinMatrixSize();
 }
@@ -77,9 +77,9 @@ Tetromino::~Tetromino() {
   }
 }
 
-void Tetromino::render(SDL_Renderer* renderer) {
+void Tetromino::render() {
   for (Cell* cell : this->cells) {
-    cell->render(renderer);
+    cell->render();
   }
 }
 
@@ -108,7 +108,7 @@ void Tetromino::getCells(std::vector<Cell*>& outCells) const {
   }
 }
 
-void Tetromino::initCells(SDL_Renderer* renderer, ShapeMatrix shape, int size) {
+void Tetromino::initCells(ShapeMatrix shape, int size) {
   this->cells.clear();
   SDL_Color color;
 
@@ -116,7 +116,7 @@ void Tetromino::initCells(SDL_Renderer* renderer, ShapeMatrix shape, int size) {
     for (std::size_t column = 0; column < shape.size(); ++column) {
       if (shape[row][column] != 0) {
         color = getColor(shape[row][column]);
-        this->cells.push_back(new Cell(renderer, color.r, color.g, color.b, size));
+        this->cells.push_back(new Cell(color.r, color.g, color.b, size));
         this->cells[this->cells.size() - 1]->shift(column + this->position.first, row + this->position.second);
       }
     }
