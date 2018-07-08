@@ -11,17 +11,17 @@ bool Tetris::init() {
     return success;
   }
 
-  this->window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->WINDOW_WIDTH, this->WINDOW_HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
+  this->setWindow(SDL_CreateWindow("Tetris", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->WINDOW_WIDTH, this->WINDOW_HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI));
 
-  if (this->window == NULL) {
+  if (this->getWindow() == NULL) {
     std::cerr << "Failed to create window: " << SDL_GetError() << std::endl;
     success = false;
     return success;
   }
 
-  this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
+  this->setRenderer(SDL_CreateRenderer(this->getWindow(), -1, SDL_RENDERER_ACCELERATED));
 
-  if (this->renderer == NULL) {
+  if (this->getRenderer() == NULL) {
     std::cerr << "Failed to init renderer: " << SDL_GetError() << std::endl;
     success = false;
     return success;
@@ -41,7 +41,7 @@ void Tetris::run() {
   uint timeSinceLastFrame = 0;
   uint lastTickTime = 0;
 
-  this->board->generateNewActiveTetromino(this->renderer);
+  this->board->generateNewActiveTetromino(this->getRenderer());
   std::cout << "RUN" << std::endl;
   bool isRunning = true;
   // SDL_Event event;
@@ -77,23 +77,19 @@ void Tetris::cleanup() {
 
   delete this->board;
 
-  SDL_RenderClear(this->renderer);
-  SDL_DestroyWindow(this->window);
+  SDL_RenderClear(this->getRenderer());
+  SDL_DestroyWindow(this->getWindow());
 
   SDL_Quit();
 }
 
-SDL_Renderer* Tetris::getRenderer() const {
-  return this->renderer;
-}
-
 void Tetris::render() {
-  SDL_SetRenderDrawColor(this->renderer, 0, 127, 255, 0);
-  SDL_RenderClear(this->renderer);
+  SDL_SetRenderDrawColor(this->getRenderer(), 0, 127, 255, 0);
+  SDL_RenderClear(this->getRenderer());
 
-  this->board->render(this->renderer);
+  this->board->render(this->getRenderer());
 
-  SDL_RenderPresent(this->renderer);
+  SDL_RenderPresent(this->getRenderer());
 }
 
 void Tetris::keyboardHandler(SDL_Keycode key) {
@@ -119,7 +115,7 @@ void Tetris::keyboardHandler(SDL_Keycode key) {
     break;
 
     case SDLK_SLASH:
-    this->board->generateNewActiveTetromino(this->renderer);
+    this->board->generateNewActiveTetromino(this->getRenderer());
     break;
   }
 }

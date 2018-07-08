@@ -2,9 +2,10 @@
 #include "tetris/headers/tetromino.h"
 #include "tetris/headers/board.h"
 #include "tetris/headers/input.h"
+#include "tetris/headers/Base.h"
 #include <SDL.h>
 
-class Tetris {
+class Tetris : Base {
 public:
   // SDL Initialization
   bool init();
@@ -13,18 +14,12 @@ public:
   // Cleanup assets
   void cleanup();
 
-  /** Getters **/
-  SDL_Window* getWindow() const;
-  SDL_Renderer* getRenderer() const;
-
 private:
   void render();
   void keyboardHandler(SDL_Keycode key);
   void initGameBoard();
 
 private:
-  SDL_Window* window;
-  SDL_Renderer* renderer;
   Board* board;
   Input input;
 
