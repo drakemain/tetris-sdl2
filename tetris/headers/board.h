@@ -24,6 +24,8 @@ private:
   bool collisionCheck(Cell* cell, int xDelta, int yDelta);
   Tetromino* spawnRandomTetromino();
   void placeActiveTetromino();
+  std::vector<int> findFilledRows();
+  bool isFilledRow(std::vector<Cell*>& row) const;
   void printGrid();
 
   SDL_Rect board;

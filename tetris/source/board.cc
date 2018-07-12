@@ -15,8 +15,6 @@ Board::Board(int heightBound) {
     this->grid[i].resize(this->GRID_WIDTH);
   }
 
-  this->printGrid();
-
   srand(time(0));
 }
 
@@ -69,7 +67,6 @@ void Board::generateNewActiveTetromino() {
   const int gridUnitPixels = this->getGridUnitPixels();
   const int xOffset = ((boardWidth / 2) / gridUnitPixels) - 2;
 
-  
   this->activeTetromino->shift(xOffset, -tetrominoHeight);
 }
 
@@ -170,7 +167,32 @@ void Board::placeActiveTetromino() {
 
   this->activeTetromino = NULL;
 
-  this->printGrid();
+  std::vector<int> filledRows = this->findFilledRows();
+}
+
+std::vector<int> Board::findFilledRows() {
+  int rowIndex = 0;
+  std::vector<int> filledRows;
+
+  for (std::vector<Cell*> row : this->grid) {
+    if (this->isFilledRow(row)) {
+      filledRows.push_back(rowIndex);
+    }
+
+    ++rowIndex;
+  }
+
+  return filledRows;
+}
+
+bool Board::isFilledRow(std::vector<Cell*>& row) const {
+  for (Cell* cell : row) {
+    if (cell == nullptr) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 void Board::printGrid() {
