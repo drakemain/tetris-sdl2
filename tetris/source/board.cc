@@ -90,7 +90,9 @@ void Board::tick(uint deltaTime) {
   
   if (this->timeSinceLastDrop >= this->dropRate) {
     this->timeSinceLastDrop -= dropRate;
-    this->shiftActiveTetromino(0, 1);
+    if (!this->shiftActiveTetromino(0, 1)) {
+      this->generateNewActiveTetromino();
+    }
   }
 }
 
