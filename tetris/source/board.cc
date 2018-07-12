@@ -1,4 +1,5 @@
 #include "tetris/headers/board.h"
+#include <iostream>
 
 Board::Board(int heightBound) {
   this->board.x = 0;
@@ -9,10 +10,12 @@ Board::Board(int heightBound) {
   this->board.w = this->gridUnitPixels * this->GRID_WIDTH;
   this->board.h = this->gridUnitPixels * this->GRID_HEIGHT;
 
-  this->grid.resize(this->GRID_HEIGHT);
-  for (int i = 0; i < this->GRID_HEIGHT; ++i) {
+  this->grid.resize(this->GRID_HEIGHT + this->SPAWN_ROWS);
+  for (int i = 0; i < this->GRID_HEIGHT + this->SPAWN_ROWS; ++i) {
     this->grid[i].resize(this->GRID_WIDTH);
   }
+
+  this->printGrid();
 
   srand(time(0));
 }
@@ -58,13 +61,16 @@ bool Board::rotateActiveTetromino() {
 }
 
 void Board::generateNewActiveTetromino() {
+  this->placeActiveTetromino();
+  this->activeTetromino = this->spawnRandomTetromino();
+
   const int boardWidth = this->getWidth();
+  const int tetrominoHeight = this->activeTetromino->getHeight();
   const int gridUnitPixels = this->getGridUnitPixels();
   const int xOffset = ((boardWidth / 2) / gridUnitPixels) - 2;
 
-  this->placeActiveTetromino();
-  this->activeTetromino = this->spawnRandomTetromino();
-  this->activeTetromino->shift(xOffset, 0);
+  
+  this->activeTetromino->shift(xOffset, -tetrominoHeight);
 }
 
 int Board::getWidth() const {
@@ -83,12 +89,12 @@ void Board::tick(uint deltaTime) {
   this->timeSinceLastDrop += deltaTime;
   
   if (this->timeSinceLastDrop >= this->dropRate) {
-    this->timeSinceLastDrop = 0;
+    this->timeSinceLastDrop -= dropRate;
     this->shiftActiveTetromino(0, 1);
   }
 }
 
-bool Board::isValidMove(Tetromino* tetromino, int xDelta, int yDelta) {
+bool Board::isValidMove(Tetromino* tetromino, int xDelta, int yDelta) {  
   std::vector<Cell*> cells;
   tetromino->getCells(cells);
 
@@ -114,21 +120,26 @@ bool Board::boundsCheck(Cell* cell, int xDelta, int yDelta) {
   int projectedX = cellPostion.first + xDelta;
   int projectedY = cellPostion.second + yDelta;
 
-  if (projectedY > (int)this->grid.size() - 1 || projectedY < 0) {
+  const int boardFloor = this->GRID_HEIGHT - 1;
+  const int boardCeiling = -1 * this->SPAWN_ROWS;
+  const int boardLeft = 0;
+  const int boardRight = this->GRID_WIDTH - 1;
+
+  if (projectedY > boardFloor || projectedY < boardCeiling) {
     return false;
   }
 
-  if (projectedX > (int)this->grid[projectedY].size() - 1 || projectedX < 0) {
+  if (projectedX > boardRight || projectedX < boardLeft) {
     return false;
   }
-
+  
   return true;
 }
 
 bool Board::collisionCheck(Cell* cell, int xDelta, int yDelta) {
   std::pair<int, int> cellPosition = cell->getBoardPosition();
   int projectedX = cellPosition.first + xDelta;
-  int projectedY = cellPosition.second + yDelta;
+  int projectedY = cellPosition.second + yDelta + this->SPAWN_ROWS;
 
   if (this->grid[projectedY][projectedX] == NULL) {
     return false;
@@ -152,8 +163,40 @@ void Board::placeActiveTetromino() {
 
   for (Cell* cell : tetrominoCells) {
     std::pair<int, int> position = cell->getBoardPosition();
-    this->grid[position.second][position.first] = cell;
+    this->grid[position.second + this->SPAWN_ROWS][position.first] = cell;
   }
 
   this->activeTetromino = NULL;
+
+  this->printGrid();
+}
+
+void Board::printGrid() {
+  int rowCounter = 0;
+
+  for (int colCounter = 0; colCounter < (int)this->grid[0].size(); ++colCounter) {
+    std::cout << colCounter + 1 << " ";
+  }
+
+  std::cout << std::endl;
+
+  for (int i = 0; i < (int)this->grid[0].size(); ++i) {
+    std::cout << "--";
+  }
+
+  std::cout << std::endl;
+
+  for (std::vector<Cell*> row : this->grid) {
+    for (Cell* cell : row) {
+      if (cell == nullptr) {
+        std::cout << "O";
+      } else {
+        std::cout << "X";
+      }
+
+      std::cout << " ";
+    }
+
+    std::cout << "|" << ++rowCounter << std::endl;
+  }
 }

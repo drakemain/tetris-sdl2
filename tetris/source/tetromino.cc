@@ -68,7 +68,7 @@ Tetromino::Tetromino(Shape shape, int cellSize)
   
   this->initCells(shapeMatrix, cellSize);
 
-  this->size = this->getMinMatrixSize();
+  this->computeDimensions();
 }
 
 Tetromino::~Tetromino() {
@@ -98,8 +98,24 @@ void Tetromino::rotate() {
     std::pair<int, int> relativePosition;
     relativePosition.first = currentPosition.first - this->position.first;
     relativePosition.second = currentPosition.second - this->position.second;
-    cell->setPosition(this->size - 1 - relativePosition.second + this->position.first, relativePosition.first + this->position.second);
+    cell->setPosition(this->boundingBoxSize - 1 - relativePosition.second + this->position.first, relativePosition.first + this->position.second);
   }
+
+  int tempValue = this->width;
+  this->width = this->height;
+  this->height = tempValue;
+}
+
+int Tetromino::getWidth() const {
+  return this->width;
+}
+
+int Tetromino::getHeight() const {
+  return this->height;
+}
+
+int Tetromino::getBoundingBoxSize() const {
+  return this->boundingBoxSize;
 }
 
 void Tetromino::getCells(std::vector<Cell*>& outCells) const {
@@ -215,7 +231,7 @@ int Tetromino::getRightEdge() {
   return edge + this->cellSize;
 }
 
-int Tetromino::getMinMatrixSize() {
+void Tetromino::computeDimensions() {
   int minXCell = this->cells[0]->getBoardPosition().first;
   int maxXCell = this->cells[0]->getBoardPosition().first;
   int minYCell = this->cells[0]->getBoardPosition().second;
@@ -234,8 +250,11 @@ int Tetromino::getMinMatrixSize() {
   int yLength = maxYCell - minYCell + 1;
 
   if (xLength > yLength) {
-    return xLength;
+    this->boundingBoxSize = xLength;
   } else {
-    return yLength;
+    this->boundingBoxSize = yLength;
   }
+
+  this->width = xLength;
+  this->height = yLength;
 }

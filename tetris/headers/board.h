@@ -24,10 +24,12 @@ private:
   bool collisionCheck(Cell* cell, int xDelta, int yDelta);
   Tetromino* spawnRandomTetromino();
   void placeActiveTetromino();
+  void printGrid();
 
   SDL_Rect board;
   const int GRID_WIDTH = 10;
   const int GRID_HEIGHT = 20;
+  const int SPAWN_ROWS = 4;
   int gridUnitPixels;
   Tetromino* activeTetromino;
   std::vector<Tetromino*> placedTetrominos;

@@ -31,6 +31,9 @@ public:
   
   // Getters
   ShapeMatrix getShapeMatrix() const;
+  int getWidth() const;
+  int getHeight() const;
+  int getBoundingBoxSize() const;
   void getCells(std::vector<Cell*>& outCells) const;
 
 private:
@@ -43,7 +46,8 @@ private:
   int getBottomEdge();
   int getLeftEdge();
   int getRightEdge();
-  int getMinMatrixSize();
+
+  void computeDimensions();
 
 private:
   // Pointers to the tetromino's cells
@@ -53,6 +57,8 @@ private:
   const int cellSize;
   // Position of the tetromino which cells are positioned relative to
   std::pair<int, int> position;
-  // Smallest square matrix size the tetromino can fit int. Used for rotation.
-  int size;
+  // Smallest square matrix size the tetromino can fit into. Used for rotation.
+  int boundingBoxSize;
+  int width;
+  int height;
 };
