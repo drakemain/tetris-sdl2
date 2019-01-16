@@ -11,12 +11,15 @@ public:
   bool shiftActiveTetromino(int x, int y);
   bool rotateActiveTetromino();
   void generateNewActiveTetromino();
+  void destroyActiveTetromino();
 
   int getWidth() const;
   int getHeight() const;
   int getGridUnitPixels() const;
 
   void tick(uint deltaTime);
+
+  void printGrid();
 
 private:
   bool isValidMove(Tetromino* tetromino, int xDelta, int yDelta);
@@ -25,8 +28,9 @@ private:
   Tetromino* spawnRandomTetromino();
   void placeActiveTetromino();
   std::vector<int> findFilledRows();
+  void clearRow(const int row);
+  void shiftDown(const int row);
   bool isFilledRow(std::vector<Cell*>& row) const;
-  void printGrid();
 
   SDL_Rect board;
   const int GRID_WIDTH = 10;

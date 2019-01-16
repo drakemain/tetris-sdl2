@@ -1,4 +1,5 @@
 #include "tetris/headers/tetromino.h"
+#include "iostream"
 
 const ShapeMatrix I =
 {
@@ -106,6 +107,19 @@ void Tetromino::rotate() {
   this->height = tempValue;
 }
 
+void Tetromino::destroy() {
+  delete this;
+}
+
+void Tetromino::destroy(Cell* cellToDestroy) {
+  for (unsigned i = 0; i < this->cells.size(); ++i) {
+    if (cellToDestroy == this->cells[i]) {
+      this->cells.erase(this->cells.begin() + i);
+      cellToDestroy->destroy();
+    }
+  }
+}
+
 int Tetromino::getWidth() const {
   return this->width;
 }
@@ -132,7 +146,7 @@ void Tetromino::initCells(ShapeMatrix shape, int size) {
     for (std::size_t column = 0; column < shape.size(); ++column) {
       if (shape[row][column] != 0) {
         color = getColor(shape[row][column]);
-        this->cells.push_back(new Cell(color.r, color.g, color.b, size));
+        this->cells.push_back(new Cell(color.r, color.g, color.b, size, this));
         this->cells[this->cells.size() - 1]->shift(column + this->position.first, row + this->position.second);
       }
     }

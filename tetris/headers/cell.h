@@ -5,9 +5,9 @@
 class Cell : public Base {
 public:
   // Constructor for default color (black)
-  Cell(int size);
+  Cell(int size, class Tetromino* owner);
   // Constructor for custom color
-  Cell(Uint8 r, Uint8 g, Uint8 b, int size);
+  Cell(Uint8 r, Uint8 g, Uint8 b, int size, class Tetromino* owner);
   // Cleanup on deletion
   ~Cell();
 
@@ -29,10 +29,15 @@ public:
   std::pair<int, int> getPixelPosition() const;
   std::pair<int, int> getBoardPosition() const;
   int getSize() const;
+  class Tetromino* getOwner();
+
+  void destroy();
 
 private:
   // Used to control the cell's color
   SDL_Texture* cell;
   // Determines size and location to render at
   SDL_Rect container;
+
+  class Tetromino* owner;
 };

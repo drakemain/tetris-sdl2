@@ -28,6 +28,8 @@ public:
   void shift(int gridUnitsX, int gridUnitsY);
   // Rotate the cells within the matrix CW 90 degrees
   void rotate();
+  void destroy(Cell* cellToDestroy);
+  void destroy();
   
   // Getters
   ShapeMatrix getShapeMatrix() const;

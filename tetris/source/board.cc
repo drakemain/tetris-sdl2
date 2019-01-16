@@ -32,7 +32,9 @@ void Board::render(SDL_Renderer* renderer) {
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
   SDL_RenderFillRect(renderer, NULL);
 
-  this->activeTetromino->render();
+  if (this->activeTetromino) {
+    this->activeTetromino->render();
+  }
 
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
   for (Tetromino* placedTetromino : this->placedTetrominos) {
@@ -59,7 +61,6 @@ bool Board::rotateActiveTetromino() {
 }
 
 void Board::generateNewActiveTetromino() {
-  this->placeActiveTetromino();
   this->activeTetromino = this->spawnRandomTetromino();
 
   const int boardWidth = this->getWidth();
@@ -68,6 +69,12 @@ void Board::generateNewActiveTetromino() {
   const int xOffset = ((boardWidth / 2) / gridUnitPixels) - 2;
 
   this->activeTetromino->shift(xOffset, -tetrominoHeight);
+}
+
+void Board::destroyActiveTetromino() {
+  std::cout << "DESTROYING" << std::endl;
+  this->activeTetromino->destroy();
+  this->activeTetromino = NULL;
 }
 
 int Board::getWidth() const {
@@ -88,6 +95,28 @@ void Board::tick(uint deltaTime) {
   if (this->timeSinceLastDrop >= this->dropRate) {
     this->timeSinceLastDrop -= dropRate;
     if (!this->shiftActiveTetromino(0, 1)) {
+      this->placeActiveTetromino();
+      
+      std::vector<int> filledRows = this->findFilledRows();
+      
+      if (!filledRows.empty()) {
+        for (int row : filledRows) {
+          this->clearRow(row);
+        }
+
+        std::cout << "Cleared row" << std::endl;
+        this->printGrid();
+
+        for (int cleared : filledRows) {
+          for (int i = cleared; i >= this->SPAWN_ROWS; --i) {
+            this->shiftDown(i - 1);
+          }
+        }
+
+        std::cout << "Shifted row" << std::endl;
+        this->printGrid();
+      }
+
       this->generateNewActiveTetromino();
     }
   }
@@ -140,7 +169,7 @@ bool Board::collisionCheck(Cell* cell, int xDelta, int yDelta) {
   int projectedX = cellPosition.first + xDelta;
   int projectedY = cellPosition.second + yDelta + this->SPAWN_ROWS;
 
-  if (this->grid[projectedY][projectedX] == NULL) {
+  if (this->grid[projectedY][projectedX] == nullptr) {
     return false;
   }
 
@@ -166,8 +195,6 @@ void Board::placeActiveTetromino() {
   }
 
   this->activeTetromino = NULL;
-
-  std::vector<int> filledRows = this->findFilledRows();
 }
 
 std::vector<int> Board::findFilledRows() {
@@ -183,6 +210,32 @@ std::vector<int> Board::findFilledRows() {
   }
 
   return filledRows;
+}
+
+void Board::clearRow(const int row) {
+  for (Cell* cell : this->grid[row]) {
+    std::pair<int, int> pos = cell->getBoardPosition();
+    cell->getOwner()->destroy(cell);
+    printf("%d, %d ", pos.first + this->SPAWN_ROWS, pos.second);
+    this->grid[pos.second + this->SPAWN_ROWS][pos.first] = nullptr;
+  }
+}
+
+void Board::shiftDown(const int row) {
+  if (row <= this->GRID_HEIGHT + this->SPAWN_ROWS - 2) {
+    if (row >= this->SPAWN_ROWS) {
+      for (Cell* cell : this->grid[row]) {
+        if (cell != nullptr) {
+          std::pair<int, int> pos = cell->getBoardPosition();
+          std::pair<int, int> newPos = pos;
+          newPos.second += 1;
+          this->grid[newPos.second + this->SPAWN_ROWS][newPos.first] = cell;
+          cell->shift(0, 1);
+          this->grid[pos.second + this->SPAWN_ROWS][pos.first] = nullptr;
+        }
+      }
+    }
+  }
 }
 
 bool Board::isFilledRow(std::vector<Cell*>& row) const {

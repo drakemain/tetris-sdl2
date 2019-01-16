@@ -103,7 +103,7 @@ void Tetris::keyboardHandler(SDL_Keycode key) {
     break;
 
     case SDLK_UP:
-    this->board->shiftActiveTetromino(0, -1);
+    this->board->rotateActiveTetromino();
     break;
 
     case SDLK_DOWN:
@@ -116,6 +116,14 @@ void Tetris::keyboardHandler(SDL_Keycode key) {
 
     case SDLK_SLASH:
     this->board->generateNewActiveTetromino();
+    break;
+
+    case SDLK_BACKSLASH:
+    this->board->printGrid();
+    break;
+
+    case SDLK_DELETE:
+    this->board->destroyActiveTetromino();
     break;
   }
 }

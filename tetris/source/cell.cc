@@ -1,7 +1,8 @@
 #include "tetris/headers/cell.h"
+#include "tetris/headers/tetromino.h"
 #include <iostream>
 
-Cell::Cell(int size) {
+Cell::Cell(int size, Tetromino* owner): owner(owner) {
   SDL_Surface* surface = SDL_CreateRGBSurface(0, 5, 5, 32, 0, 0, 0, 0);
 
   this->cell = SDL_CreateTextureFromSurface(this->getRenderer(), surface);
@@ -13,7 +14,7 @@ Cell::Cell(int size) {
   this->container.h = size;
 }
 
-Cell::Cell(Uint8 r, Uint8 g, Uint8 b, int size) {
+Cell::Cell(Uint8 r, Uint8 g, Uint8 b, int size, Tetromino* owner): owner(owner) {
   this->setColor(r, g, b);
 
   this->container.x = 0;
@@ -71,4 +72,12 @@ std::pair<int, int> Cell::getBoardPosition() const {
 int Cell::getSize() const {
   // cell should always be square
   return this->container.w;
+}
+
+Tetromino* Cell::getOwner() {
+  return this->owner;
+}
+
+void Cell::destroy() {
+  delete this;
 }
