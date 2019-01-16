@@ -11,6 +11,7 @@ public:
   bool shiftActiveTetromino(int x, int y);
   bool rotateActiveTetromino();
   void generateNewActiveTetromino();
+  void generateNewActiveTetromino(Shape shape);
   void destroyActiveTetromino();
 
   int getWidth() const;

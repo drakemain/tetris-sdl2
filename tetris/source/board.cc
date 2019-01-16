@@ -61,7 +61,22 @@ bool Board::rotateActiveTetromino() {
 }
 
 void Board::generateNewActiveTetromino() {
+  if (this->activeTetromino) { this->destroyActiveTetromino(); }
+  
   this->activeTetromino = this->spawnRandomTetromino();
+
+  const int boardWidth = this->getWidth();
+  const int tetrominoHeight = this->activeTetromino->getHeight();
+  const int gridUnitPixels = this->getGridUnitPixels();
+  const int xOffset = ((boardWidth / 2) / gridUnitPixels) - 2;
+
+  this->activeTetromino->shift(xOffset, -tetrominoHeight);
+}
+
+void Board::generateNewActiveTetromino(Shape shape) {
+  if (this->activeTetromino) { this->destroyActiveTetromino(); }
+  
+  this->activeTetromino = new Tetromino(shape, this->getGridUnitPixels());
 
   const int boardWidth = this->getWidth();
   const int tetrominoHeight = this->activeTetromino->getHeight();
@@ -104,17 +119,11 @@ void Board::tick(uint deltaTime) {
           this->clearRow(row);
         }
 
-        std::cout << "Cleared row" << std::endl;
-        this->printGrid();
-
         for (int cleared : filledRows) {
           for (int i = cleared; i >= this->SPAWN_ROWS; --i) {
             this->shiftDown(i - 1);
           }
         }
-
-        std::cout << "Shifted row" << std::endl;
-        this->printGrid();
       }
 
       this->generateNewActiveTetromino();
@@ -216,7 +225,6 @@ void Board::clearRow(const int row) {
   for (Cell* cell : this->grid[row]) {
     std::pair<int, int> pos = cell->getBoardPosition();
     cell->getOwner()->destroy(cell);
-    printf("%d, %d ", pos.first + this->SPAWN_ROWS, pos.second);
     this->grid[pos.second + this->SPAWN_ROWS][pos.first] = nullptr;
   }
 }
