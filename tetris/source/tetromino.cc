@@ -136,9 +136,9 @@ bool Tetromino::validRotate(int maxCol, int maxRow) {
     newPosition.second = relativePosition.first + this->position.second;
 
     if (
-      newPosition.second > maxRow || newPosition.second < 0
-      || newPosition.first > maxCol || newPosition.first < 0
-      ) { isValidRotation = false; }
+      newPosition.second >= maxRow
+      || newPosition.first >= maxCol || newPosition.first < 0
+      ) { isValidRotation = false; break; }
       else { newPositions.push_back(newPosition); }
   }
 
