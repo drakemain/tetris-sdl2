@@ -52,7 +52,7 @@ const ShapeMatrix Z = {
 };
 
 Tetromino::Tetromino(Shape shape, int cellSize)
-:cellSize(cellSize) {
+: cellSize(cellSize) {
   this->position.first = 0;
   this->position.second = 0;
   ShapeMatrix shapeMatrix;
@@ -68,6 +68,20 @@ Tetromino::Tetromino(Shape shape, int cellSize)
   }
   
   this->initCells(shapeMatrix, cellSize);
+
+  this->computeDimensions();
+}
+
+Tetromino::Tetromino(const Tetromino& other)
+: cellSize(other.cellSize) {
+  this->position.first = other.position.first;
+  this->position.second = other.position.second;
+  std::vector<Cell*> cells;
+  other.getCells(cells);
+  
+  for (Cell* cell : cells) {
+    this->cells.push_back(cell->copy(this));
+  }
 
   this->computeDimensions();
 }
@@ -120,12 +134,20 @@ void Tetromino::destroy(Cell* cellToDestroy) {
   }
 }
 
+Tetromino* Tetromino::makeNewCopy() {
+  return new Tetromino(*this);
+}
+
 int Tetromino::getWidth() const {
   return this->width;
 }
 
 int Tetromino::getHeight() const {
   return this->height;
+}
+
+std::pair<int, int> Tetromino::getPosition() const {
+  return this->position;
 }
 
 int Tetromino::getBoundingBoxSize() const {

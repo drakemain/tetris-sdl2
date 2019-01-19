@@ -19,6 +19,7 @@ class Tetromino {
 public:
   // Constructor; Needs render target
   Tetromino(Shape shape, int cellSize);
+  Tetromino(const Tetromino& other);
   // Delete each cell and vector container
   ~Tetromino();
 
@@ -30,11 +31,13 @@ public:
   void rotate();
   void destroy(Cell* cellToDestroy);
   void destroy();
+  Tetromino* makeNewCopy();
   
   // Getters
   ShapeMatrix getShapeMatrix() const;
   int getWidth() const;
   int getHeight() const;
+  std::pair<int, int> getPosition() const;
   int getBoundingBoxSize() const;
   void getCells(std::vector<Cell*>& outCells) const;
 

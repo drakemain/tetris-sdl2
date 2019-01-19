@@ -5,6 +5,7 @@
 bool Tetris::init() {
   std::cout << "INIT" << std::endl;
   bool success = true;
+  srand(time(0));
 
   if (this->devMode) { std::cout << "Dev mode is enabled." << std::endl; }
 
@@ -46,7 +47,6 @@ void Tetris::run() {
   this->board->generateNewActiveTetromino();
   std::cout << "RUN" << std::endl;
   bool isRunning = true;
-  // SDL_Event event;
 
   while(isRunning) {
     runTime = SDL_GetTicks();
@@ -111,14 +111,14 @@ void Tetris::keyboardHandler(SDL_Keycode key) {
     case SDLK_DOWN:
     this->board->shiftActiveTetromino(0, 1);
     break;
-
-    case SDLK_SPACE:
-    this->board->rotateActiveTetromino();
-    break;
   }
 
   if (this->devMode) {
     switch(key) {
+      case SDLK_SPACE:
+      this->board->createGhost();
+      break;
+
       case SDLK_SLASH:
       this->board->generateNewActiveTetromino();
       break;

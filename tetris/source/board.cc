@@ -14,8 +14,6 @@ Board::Board(int heightBound) {
   for (int i = 0; i < this->GRID_HEIGHT + this->SPAWN_ROWS; ++i) {
     this->grid[i].resize(this->GRID_WIDTH);
   }
-
-  srand(time(0));
 }
 
 Board::~Board() {
@@ -24,6 +22,7 @@ Board::~Board() {
   }
 
   delete this->activeTetromino;
+  delete this->dropGhost;
 }
 
 void Board::render(SDL_Renderer* renderer) {
@@ -31,12 +30,16 @@ void Board::render(SDL_Renderer* renderer) {
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
   SDL_RenderFillRect(renderer, NULL);
+  SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
 
   if (this->activeTetromino) {
     this->activeTetromino->render();
   }
 
-  SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+  if (this->dropGhost) {
+    this->dropGhost->render();
+  }
+
   for (Tetromino* placedTetromino : this->placedTetrominos) {
     placedTetromino->render();
   }
@@ -47,6 +50,13 @@ bool Board::shiftActiveTetromino(int x, int y) {
 
   if (this->isValidMove(this->activeTetromino, x, y)) {
     this->activeTetromino->shift(x, y);
+
+    std::cout << this->dropGhost->getPosition().second << std::endl;
+    
+    if (x != 0) {
+      this->adjustGhost(x);
+    }
+
     return true;
   }
 
@@ -57,6 +67,12 @@ bool Board::rotateActiveTetromino() {
   if (this->activeTetromino == NULL) { return false; }
 
   this->activeTetromino->rotate();
+
+  if (this->dropGhost) {
+    this->dropGhost->rotate();
+    this->adjustGhost(0);
+  }
+
   return true;
 }
 
@@ -71,6 +87,7 @@ void Board::generateNewActiveTetromino() {
   const int xOffset = ((boardWidth / 2) / gridUnitPixels) - 2;
 
   this->activeTetromino->shift(xOffset, -tetrominoHeight);
+  this->createGhost();
 }
 
 void Board::generateNewActiveTetromino(Shape shape) {
@@ -84,12 +101,35 @@ void Board::generateNewActiveTetromino(Shape shape) {
   const int xOffset = ((boardWidth / 2) / gridUnitPixels) - 2;
 
   this->activeTetromino->shift(xOffset, -tetrominoHeight);
+  this->createGhost();
 }
 
 void Board::destroyActiveTetromino() {
-  std::cout << "DESTROYING" << std::endl;
-  this->activeTetromino->destroy();
-  this->activeTetromino = NULL;
+  if (this->activeTetromino) {
+    this->activeTetromino->destroy();
+    this->activeTetromino = NULL;
+  }
+
+  if (this->dropGhost) {
+    this->dropGhost->destroy();
+  }
+}
+
+void Board::createGhost() {
+  if (this->dropGhost) {
+    this->dropGhost->destroy();
+  }
+
+  if (this->activeTetromino) {
+    std::vector<Cell*> cells;
+    this->dropGhost = activeTetromino->makeNewCopy();
+
+    this->dropGhost->getCells(cells);
+
+    while(this->isValidMove(this->dropGhost, 0, 1)) {
+      this->dropGhost->shift(0, 1);
+    }
+  }
 }
 
 int Board::getWidth() const {
@@ -150,6 +190,19 @@ bool Board::isValidMove(Tetromino* tetromino, int xDelta, int yDelta) {
   }
 
   return true;
+}
+
+void Board::adjustGhost(int x) {
+  if (!this->dropGhost) { return; }
+
+  std::pair<int, int> pos = this->dropGhost->getPosition();
+
+  this->dropGhost->shift(x, -(this->GRID_HEIGHT -(this->GRID_HEIGHT - pos.second)));
+
+  while (this->isValidMove(this->dropGhost, 0, 1)) {
+    std::cout << this->dropGhost->getPosition().second << std::endl;
+    this->dropGhost->shift(0, 1);
+  }
 }
 
 bool Board::boundsCheck(Cell* cell, int xDelta, int yDelta) {

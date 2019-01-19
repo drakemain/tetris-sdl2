@@ -14,6 +14,8 @@ public:
   void generateNewActiveTetromino(Shape shape);
   void destroyActiveTetromino();
 
+  void createGhost();
+
   int getWidth() const;
   int getHeight() const;
   int getGridUnitPixels() const;
@@ -23,6 +25,7 @@ public:
   void printGrid();
 
 private:
+  void adjustGhost(int x);
   bool isValidMove(Tetromino* tetromino, int xDelta, int yDelta);
   bool boundsCheck(Cell* cell, int xDelta, int yDelta);
   bool collisionCheck(Cell* cell, int xDelta, int yDelta);
@@ -39,6 +42,7 @@ private:
   const int SPAWN_ROWS = 4;
   int gridUnitPixels;
   Tetromino* activeTetromino;
+  Tetromino* dropGhost;
   std::vector<Tetromino*> placedTetrominos;
   std::vector<std::vector<Cell*>> grid;
 

@@ -23,11 +23,23 @@ Cell::Cell(Uint8 r, Uint8 g, Uint8 b, int size, Tetromino* owner): owner(owner) 
   this->container.h = size;
 }
 
+Cell::Cell(const Cell& other, Tetromino* owner): owner(owner) {
+  this->color = other.color;
+  this->setColor(other.color.r, other.color.g, other.color.b);
+  std::pair<int, int> pos = other.getPixelPosition();
+
+  this->container.x = pos.first;
+  this->container.y = pos.second;
+  this->container.w = other.getSize();
+  this->container.h = other.getSize();
+}
+
 Cell::~Cell() {
   SDL_DestroyTexture(this->cell);
 }
 
 void Cell::setColor(Uint8 r, Uint8 g, Uint8 b) {
+  this->color.r = r; this->color.g = g; this->color.b = b;
   SDL_Surface* surface = SDL_CreateRGBSurface(0, 5, 5, 32, 0, 0, 0, 0);
   SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, r, g, b));
   
@@ -38,6 +50,10 @@ void Cell::setColor(Uint8 r, Uint8 g, Uint8 b) {
 
 void Cell::render() {
   SDL_RenderCopy(this->getRenderer(), this->cell, NULL, &this->container);
+}
+
+Cell* Cell::copy(Tetromino* owner) {
+  return new Cell(*this, owner);
 }
 
 void Cell::shift(int gridX, int gridY) {
@@ -72,6 +88,10 @@ std::pair<int, int> Cell::getBoardPosition() const {
 int Cell::getSize() const {
   // cell should always be square
   return this->container.w;
+}
+
+SDL_Color Cell::getColor() const {
+  return this->color;
 }
 
 Tetromino* Cell::getOwner() {
