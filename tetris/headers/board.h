@@ -28,6 +28,7 @@ private:
   void adjustGhost(int x);
   bool isValidMove(Tetromino* tetromino, int xDelta, int yDelta);
   bool boundsCheck(Cell* cell, int xDelta, int yDelta);
+  bool boundsCheck(Tetromino&, int xDelta, int yDelta);
   bool collisionCheck(Cell* cell, int xDelta, int yDelta);
   Tetromino* spawnRandomTetromino();
   void placeActiveTetromino();

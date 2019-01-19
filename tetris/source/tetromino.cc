@@ -121,6 +121,40 @@ void Tetromino::rotate() {
   this->height = tempValue;
 }
 
+bool Tetromino::validRotate(int maxCol, int maxRow) {
+  bool isValidRotation = true;
+  std::vector<std::pair<int, int>> newPositions;
+  newPositions.reserve(this->cells.size());
+  
+  for (Cell* cell : this->cells) {
+    std::pair<int, int> currentPosition = cell->getBoardPosition();
+    std::pair<int, int> relativePosition;
+    std::pair<int, int> newPosition;
+    relativePosition.first = currentPosition.first - this->position.first;
+    relativePosition.second = currentPosition.second - this->position.second;
+    newPosition.first = this->boundingBoxSize - 1 - relativePosition.second + this->position.first;
+    newPosition.second = relativePosition.first + this->position.second;
+
+    if (
+      newPosition.second > maxRow || newPosition.second < 0
+      || newPosition.first > maxCol || newPosition.first < 0
+      ) { isValidRotation = false; }
+      else { newPositions.push_back(newPosition); }
+  }
+
+  if (isValidRotation) {
+    for (std::size_t i = 0; i < newPositions.size(); ++i) {
+      this->cells[i]->setPosition(newPositions[i].first, newPositions[i].second);
+    }
+
+    int tempValue = this->width;
+    this->width = this->height;
+    this->height = tempValue;
+  }
+  
+  return isValidRotation;
+}
+
 void Tetromino::destroy() {
   delete this;
 }

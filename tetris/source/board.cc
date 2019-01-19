@@ -66,14 +66,18 @@ bool Board::shiftActiveTetromino(int x, int y) {
 bool Board::rotateActiveTetromino() {
   if (this->activeTetromino == NULL) { return false; }
 
-  this->activeTetromino->rotate();
+  bool validRotation = false;
 
-  if (this->dropGhost) {
-    this->dropGhost->rotate();
-    this->adjustGhost(0);
+  if (this->activeTetromino->validRotate(this->GRID_WIDTH, this->GRID_HEIGHT)) {
+    if (this->dropGhost) {
+      this->dropGhost->rotate();
+      this->adjustGhost(0);
+    }
+
+    validRotation = true;
   }
 
-  return true;
+  return validRotation;
 }
 
 void Board::generateNewActiveTetromino() {
@@ -195,12 +199,12 @@ bool Board::isValidMove(Tetromino* tetromino, int xDelta, int yDelta) {
 void Board::adjustGhost(int x) {
   if (!this->dropGhost) { return; }
 
-  std::pair<int, int> pos = this->dropGhost->getPosition();
+  std::pair<int, int> currentPos = this->dropGhost->getPosition();
+  std::pair<int, int> targetPos = this->activeTetromino->getPosition();
 
-  this->dropGhost->shift(x, -(this->GRID_HEIGHT -(this->GRID_HEIGHT - pos.second)));
+  this->dropGhost->shift(x, -(currentPos.second - targetPos.second));
 
   while (this->isValidMove(this->dropGhost, 0, 1)) {
-    std::cout << this->dropGhost->getPosition().second << std::endl;
     this->dropGhost->shift(0, 1);
   }
 }
@@ -224,6 +228,21 @@ bool Board::boundsCheck(Cell* cell, int xDelta, int yDelta) {
   }
   
   return true;
+}
+
+bool Board::boundsCheck(Tetromino& tetromino, int xDelta, int yDelta) {
+  std::vector<Cell*> cells;
+  tetromino.getCells(cells);
+  bool result = true;
+  
+  for (Cell* cell : cells) {
+    if (!this->boundsCheck(cell, xDelta, yDelta)) {
+      result = false;
+      break;
+    }
+  }
+
+  return result;
 }
 
 bool Board::collisionCheck(Cell* cell, int xDelta, int yDelta) {

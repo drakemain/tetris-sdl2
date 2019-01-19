@@ -29,6 +29,7 @@ public:
   void shift(int gridUnitsX, int gridUnitsY);
   // Rotate the cells within the matrix CW 90 degrees
   void rotate();
+  bool validRotate(int maxRow, int maxCol);
   void destroy(Cell* cellToDestroy);
   void destroy();
   Tetromino* makeNewCopy();
