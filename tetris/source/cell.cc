@@ -48,6 +48,16 @@ void Cell::setColor(Uint8 r, Uint8 g, Uint8 b) {
   SDL_FreeSurface(surface);
 }
 
+void Cell::setAlpha(Uint8 alpha) {
+  if (alpha < 255) {
+    SDL_SetTextureBlendMode(this->cell, SDL_BLENDMODE_BLEND);
+  } else {
+    SDL_SetTextureBlendMode(this->cell, SDL_BLENDMODE_NONE);
+  }
+  
+  SDL_SetTextureAlphaMod(this->cell, alpha);
+}
+
 void Cell::render() {
   SDL_RenderCopy(this->getRenderer(), this->cell, NULL, &this->container);
 }

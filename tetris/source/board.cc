@@ -127,6 +127,7 @@ void Board::createGhost() {
   if (this->activeTetromino) {
     std::vector<Cell*> cells;
     this->dropGhost = activeTetromino->makeNewCopy();
+    this->dropGhost->setAlpha(96);
 
     this->dropGhost->getCells(cells);
 

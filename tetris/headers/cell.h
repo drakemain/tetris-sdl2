@@ -23,6 +23,8 @@ public:
   // Set the size of the cell
   void setDimensions(int w, int h);
 
+  void setAlpha(Uint8 alpha);
+
   // Adjusts the cell position
   void shift(int gridX, int gridY);
   // Sets new position

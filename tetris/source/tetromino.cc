@@ -155,6 +155,12 @@ bool Tetromino::validRotate(int maxCol, int maxRow) {
   return isValidRotation;
 }
 
+void Tetromino::setAlpha(Uint8 alpha) {
+  for (Cell* cell : this->cells) {
+    cell->setAlpha(alpha);
+  }
+}
+
 void Tetromino::destroy() {
   delete this;
 }
