@@ -1,7 +1,4 @@
 #pragma once
-#include "tetris/headers/tetromino.h"
-#include "tetris/headers/board.h"
-#include "tetris/headers/input.h"
 #include "tetris/headers/Base.h"
 #include <vector>
 #include <SDL.h>
@@ -11,7 +8,7 @@ public:
   Tetris(){};
   Tetris(bool devMode): devMode(devMode){};
   // SDL Initialization
-  bool init();
+  bool init(uint players);
   // Contains game loop
   void run();
   // Cleanup assets
@@ -19,13 +16,16 @@ public:
 
 private:
   void render();
+  void inputHandler();
   void keyboardHandler(SDL_Keycode key);
-  void initGameBoard();
+  void tick(uint deltaTime);
 
 private:
-  Board* board;
-  Input input;
+  std::vector<class Board*> boards;
+  std::vector<class Player*> players;
+  class Input* input;
   bool devMode = false;
+  bool isRunning = true;
 
   const int WINDOW_WIDTH = 1280;
   const int WINDOW_HEIGHT = 1024;
