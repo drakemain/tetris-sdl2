@@ -5,6 +5,10 @@ class Player {
 public:
   Player(class Board* board);
 
+  static unsigned int count;
+
+  const unsigned int id = 0;
+
   void tick(unsigned int deltaTme);
 
   void handleInput(SDL_Keycode key);

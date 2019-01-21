@@ -24,6 +24,7 @@ private:
   std::vector<class Board*> boards;
   std::vector<class Player*> players;
   class Input* input;
+  class Scoreboard* scoreboard;
   bool devMode = false;
   bool isRunning = true;
 

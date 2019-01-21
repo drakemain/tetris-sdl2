@@ -1,8 +1,13 @@
 #include "tetris/headers/player.h"
 #include "tetris/headers/board.h"
 
+unsigned int Player::count = 0;
+
 Player::Player(Board* board)
-: board(board) {}
+: id(Player::count), board(board)
+{ 
+  ++Player::count;
+}
 
 void Player::incrementScore(const unsigned int amount) {
   this->score += amount;

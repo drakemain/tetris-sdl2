@@ -43,6 +43,8 @@ void Board::render(SDL_Renderer* renderer) {
   for (Tetromino* placedTetromino : this->placedTetrominos) {
     placedTetromino->render();
   }
+
+  SDL_RenderSetViewport(renderer, NULL);
 }
 
 bool Board::shiftActiveTetromino(int x, int y) {

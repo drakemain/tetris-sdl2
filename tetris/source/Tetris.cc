@@ -3,7 +3,8 @@
 #include "tetris/headers/board.h"
 #include "tetris/headers/input.h"
 #include "tetris/headers/player.h"
-#include <SDL_image.h>
+#include "tetris/headers/scoreboard.h"
+#include <SDL_ttf.h>
 #include <iostream>
 
 bool Tetris::init(uint players = 1) {
@@ -16,6 +17,10 @@ bool Tetris::init(uint players = 1) {
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
     success = false;
     return success;
+  }
+
+  if (TTF_Init() != 0) {
+    return false;
   }
 
   this->setWindow(SDL_CreateWindow("Tetris", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->WINDOW_WIDTH, this->WINDOW_HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI));
@@ -34,12 +39,17 @@ bool Tetris::init(uint players = 1) {
     return success;
   }
 
-  this->input = new Input();
-
   for (uint i = 0; i < players; ++i) {
     this->boards.push_back(new Board(this->WINDOW_HEIGHT));
     this->players.push_back(new Player(this->boards[i]));
   }
+
+  this->input = new Input();
+  this->scoreboard = new Scoreboard("tetris/RobotoMono-Medium.ttf");
+  this->scoreboard->init(this->players);
+  this->scoreboard->setHeight(100);
+  this->scoreboard->setWidth(500);
+  this->scoreboard->setPosition(500, 0);
   
   std::cout << "Init successful." << std::endl;
   return success;
@@ -57,7 +67,6 @@ void Tetris::run() {
   for (Board* board : this->boards) {
     board->generateNewActiveTetromino();
   }
-  std::cout << "RUN" << std::endl;
 
   while(this->isRunning) {
     runTime = SDL_GetTicks();
@@ -94,6 +103,7 @@ void Tetris::cleanup() {
   this->destroyWindow();
 
   SDL_Quit();
+  TTF_Quit();
 }
 
 void Tetris::render() {
@@ -103,6 +113,8 @@ void Tetris::render() {
   for (Board* board : this->boards) {
     board->render(this->getRenderer());
   }
+
+  this->scoreboard->render();
 
   SDL_RenderPresent(this->getRenderer());
 }
@@ -177,4 +189,6 @@ void Tetris::tick(uint deltaTime) {
   for (Player* player : this->players) {
     player->tick(deltaTime);
   }
+
+  this->scoreboard->update(this->players);
 }
