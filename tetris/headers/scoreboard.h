@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include "tetris/headers/Base.h"
 
+// TODO: Render inside viewport
+
 class Scoreboard : public Base {
 public:
   Scoreboard(const char* fontPath);

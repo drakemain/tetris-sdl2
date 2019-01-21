@@ -19,6 +19,7 @@ private:
   void inputHandler();
   void keyboardHandler(SDL_Keycode key);
   void tick(uint deltaTime);
+  void togglePause();
 
 private:
   std::vector<class Board*> boards;
@@ -27,6 +28,7 @@ private:
   class Scoreboard* scoreboard;
   bool devMode = false;
   bool isRunning = true;
+  bool isPaused = false;
 
   const int WINDOW_WIDTH = 1280;
   const int WINDOW_HEIGHT = 1024;
