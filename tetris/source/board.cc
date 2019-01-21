@@ -43,6 +43,8 @@ void Board::render(SDL_Renderer* renderer) {
   for (Tetromino* placedTetromino : this->placedTetrominos) {
     placedTetromino->render();
   }
+
+  SDL_RenderSetViewport(renderer, NULL);
 }
 
 bool Board::shiftActiveTetromino(int x, int y) {
@@ -50,8 +52,6 @@ bool Board::shiftActiveTetromino(int x, int y) {
 
   if (this->isValidMove(this->activeTetromino, x, y)) {
     this->activeTetromino->shift(x, y);
-
-    std::cout << this->dropGhost->getPosition().second << std::endl;
     
     if (x != 0) {
       this->adjustGhost(x);
@@ -149,6 +149,12 @@ int Board::getGridUnitPixels() const {
   return this->gridUnitPixels;
 }
 
+unsigned int Board::getDeltaPoints() {
+  unsigned int points = this->deltaPoints;
+  this->deltaPoints = 0;
+  return points;
+}
+
 void Board::tick(uint deltaTime) {
   this->timeSinceLastDrop += deltaTime;
   
@@ -160,6 +166,9 @@ void Board::tick(uint deltaTime) {
       std::vector<int> filledRows = this->findFilledRows();
       
       if (!filledRows.empty()) {
+        // TODO: points per row should not scale linearly
+        this->deltaPoints += filledRows.size();
+
         for (int row : filledRows) {
           this->clearRow(row);
         }

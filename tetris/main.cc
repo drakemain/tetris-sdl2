@@ -1,4 +1,5 @@
 #include "tetris/headers/Tetris.h"
+#include <string>
 
 int main(int argc, char* argv[]) {
   bool devMode = false;
@@ -13,7 +14,7 @@ int main(int argc, char* argv[]) {
 
   Tetris tetris(devMode);
   
-  if (tetris.init()) {
+  if (tetris.init(1)) {
     tetris.run();
   }
 

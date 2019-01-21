@@ -19,6 +19,7 @@ public:
   int getWidth() const;
   int getHeight() const;
   int getGridUnitPixels() const;
+  uint getDeltaPoints();
 
   void tick(uint deltaTime);
 
@@ -49,4 +50,5 @@ private:
 
   int dropRate = 1000;
   int timeSinceLastDrop = 0;
+  uint deltaPoints;
 };
