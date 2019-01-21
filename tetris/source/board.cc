@@ -166,8 +166,7 @@ void Board::tick(uint deltaTime) {
       std::vector<int> filledRows = this->findFilledRows();
       
       if (!filledRows.empty()) {
-        // TODO: points per row should not scale linearly
-        this->deltaPoints += filledRows.size();
+        this->deltaPoints += filledRows.size() * filledRows.size();
 
         for (int row : filledRows) {
           this->clearRow(row);

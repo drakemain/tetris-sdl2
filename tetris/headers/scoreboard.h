@@ -17,8 +17,7 @@ public:
   void setHeight(int h);
 
   void update(std::vector<Player*> players);
-
-  
+  void update(Player* player);
 
   void render();
 private:

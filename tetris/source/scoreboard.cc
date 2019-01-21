@@ -5,7 +5,7 @@
 using PlayerToTexture = std::pair<class Player*, std::pair<class SDL_Texture*, class SDL_Rect>>;
 
 Scoreboard::Scoreboard(const char* fontPath) {
-  this->font = TTF_OpenFont(fontPath, 16);
+  this->font = TTF_OpenFont(fontPath, 32);
 
   if (!this->font) {
     printf("Scoreboard failed to load font %s. %s", fontPath, TTF_GetError());
@@ -15,7 +15,9 @@ Scoreboard::Scoreboard(const char* fontPath) {
 Scoreboard::~Scoreboard() {
   TTF_CloseFont(this->font);
 
-
+  for (PlayerToTexture t : this->textures) {
+    SDL_DestroyTexture(t.second.first);
+  }
 }
 
 void Scoreboard::init(std::vector<Player*>& players) {
@@ -25,7 +27,7 @@ void Scoreboard::init(std::vector<Player*>& players) {
   for (size_t i = 0; i < players.size(); ++i) {
     this->scores[players[i]] = 0;
     SDL_Rect container;
-    container.x = 500;
+    container.x = 525;
     container.y = 100 * i;
     container.w = 500;
     container.h = 100;
@@ -59,6 +61,17 @@ void Scoreboard::update(std::vector<Player*> players) {
   }
 }
 
+void Scoreboard::update(Player* player) {
+  if (player) {
+    unsigned int score = player->getScore();
+
+    if (score != this->scores[player]) {
+      this->scores[player] = score;
+      this->draw(player);
+    }
+  }
+}
+
 void Scoreboard::draw() {
   for (std::pair<Player*, unsigned int> score : this->scores) {
     this->draw(score.first);
@@ -82,6 +95,11 @@ void Scoreboard::draw(Player* player) {
 
 void Scoreboard::render() {
   for (PlayerToTexture t : this->textures) {
-    SDL_RenderCopy(this->getRenderer(), t.second.first, NULL, &t.second.second);
+    SDL_Texture* texture = t.second.first;
+
+    if (texture) {
+      SDL_Rect* container = &t.second.second;
+      SDL_RenderCopy(this->getRenderer(), texture, NULL, container);
+    }
   }
 }
