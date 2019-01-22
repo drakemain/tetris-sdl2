@@ -21,7 +21,6 @@ Scoreboard::~Scoreboard() {
 }
 
 void Scoreboard::init(std::vector<Player*>& players) {
-  std::cout << "INIT" << std::endl;
   this->scores.reserve(players.size());
   
   for (size_t i = 0; i < players.size(); ++i) {
@@ -79,8 +78,6 @@ void Scoreboard::draw() {
 }
 
 void Scoreboard::draw(Player* player) {
-  std::cout << "DRAW" << std::endl;
-
   if (this->textures[player].first) {
     SDL_DestroyTexture(this->textures[player].first);
   }

@@ -20,6 +20,7 @@ private:
   void keyboardHandler(SDL_Keycode key);
   void tick(uint deltaTime);
   void togglePause();
+  void reset();
 
 private:
   std::vector<class Board*> boards;

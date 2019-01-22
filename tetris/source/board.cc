@@ -17,12 +17,7 @@ Board::Board(int heightBound) {
 }
 
 Board::~Board() {
-  for (Tetromino* tetromino : this->placedTetrominos) {
-    delete tetromino;
-  }
-
-  delete this->activeTetromino;
-  delete this->dropGhost;
+  this->cleanup();
 }
 
 void Board::render(SDL_Renderer* renderer) {
@@ -159,6 +154,8 @@ void Board::tick(uint deltaTime) {
   this->timeSinceLastDrop += deltaTime;
   
   if (this->timeSinceLastDrop >= this->dropRate) {
+    if (!this->activeTetromino) { this->generateNewActiveTetromino(); }
+
     this->timeSinceLastDrop -= dropRate;
     if (!this->shiftActiveTetromino(0, 1)) {
       this->placeActiveTetromino();
@@ -180,6 +177,19 @@ void Board::tick(uint deltaTime) {
       }
 
       this->generateNewActiveTetromino();
+    }
+  }
+}
+
+void Board::reset() {
+  this->cleanup();
+
+  this->activeTetromino = nullptr;
+  this->dropGhost = nullptr;
+
+  for (size_t i = 0; i < this->grid.size(); ++i) {
+    for (size_t j = 0; j < this->grid[i].size(); ++j) {
+      this->grid[i][j] = nullptr;
     }
   }
 }
@@ -335,6 +345,20 @@ bool Board::isFilledRow(std::vector<Cell*>& row) const {
   }
 
   return true;
+}
+
+void Board::cleanup() {
+  for (Tetromino* tetromino : this->placedTetrominos) {
+    delete tetromino;
+  }
+  
+  if (this->activeTetromino) {
+    delete this->activeTetromino;
+  }
+
+  if (this->dropGhost) {
+    delete this->dropGhost;
+  }
 }
 
 void Board::printGrid() {

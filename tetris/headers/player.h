@@ -12,6 +12,8 @@ public:
   void tick(unsigned int deltaTme);
 
   void handleInput(SDL_Keycode key);
+
+  void reset();
   
   unsigned int getScore() const;
 private:

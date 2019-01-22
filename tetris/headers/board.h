@@ -23,6 +23,8 @@ public:
 
   void tick(uint deltaTime);
 
+  void reset();
+
   void printGrid();
 
 private:
@@ -37,6 +39,7 @@ private:
   void clearRow(const int row);
   void shiftDown(const int row);
   bool isFilledRow(std::vector<Cell*>& row) const;
+  void cleanup();
 
   SDL_Rect board;
   const int GRID_WIDTH = 10;

@@ -38,6 +38,10 @@ void Player::handleInput(SDL_Keycode key) {
   }
 }
 
+void Player::reset() {
+  this->score = 0;
+}
+
 uint Player::getScore() const {
   return this->score;
 }

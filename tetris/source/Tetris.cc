@@ -137,6 +137,10 @@ void Tetris::keyboardHandler(SDL_Keycode key) {
   }
 
   if (this->isPaused) { return; }
+
+  if (key == SDLK_r) {
+    this->reset();
+  }
   
   for (Player* player : this->players) {
     player->handleInput(key);
@@ -204,4 +208,14 @@ void Tetris::tick(uint deltaTime) {
 
 void Tetris::togglePause() {
   this->isPaused = !this->isPaused;
+}
+
+void Tetris::reset() {
+  for (Player* player : this->players) {
+    player->reset();
+  }
+
+  for (Board* board : this->boards) {
+    board->reset();
+  }
 }
