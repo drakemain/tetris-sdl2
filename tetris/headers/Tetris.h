@@ -30,6 +30,7 @@ private:
   bool devMode = false;
   bool isRunning = true;
   bool isPaused = false;
+  bool hasLost = false;
 
   const int WINDOW_WIDTH = 1280;
   const int WINDOW_HEIGHT = 1024;

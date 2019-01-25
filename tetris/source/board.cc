@@ -144,6 +144,10 @@ int Board::getGridUnitPixels() const {
   return this->gridUnitPixels;
 }
 
+bool Board::checkHasLost() const {
+  return this->hasLost;
+}
+
 unsigned int Board::getDeltaPoints() {
   unsigned int points = this->deltaPoints;
   this->deltaPoints = 0;
@@ -159,24 +163,26 @@ void Board::tick(uint deltaTime) {
     this->timeSinceLastDrop -= dropRate;
     if (!this->shiftActiveTetromino(0, 1)) {
       this->placeActiveTetromino();
-      
-      std::vector<int> filledRows = this->findFilledRows();
-      
-      if (!filledRows.empty()) {
-        this->deltaPoints += filledRows.size() * filledRows.size();
 
-        for (int row : filledRows) {
-          this->clearRow(row);
-        }
+      if (!this->hasLost) {
+        std::vector<int> filledRows = this->findFilledRows();
+      
+        if (!filledRows.empty()) {
+          this->deltaPoints += filledRows.size() * filledRows.size();
 
-        for (int cleared : filledRows) {
-          for (int i = cleared; i >= this->SPAWN_ROWS; --i) {
-            this->shiftDown(i - 1);
+          for (int row : filledRows) {
+            this->clearRow(row);
+          }
+
+          for (int cleared : filledRows) {
+            for (int i = cleared; i >= this->SPAWN_ROWS; --i) {
+              this->shiftDown(i - 1);
+            }
           }
         }
-      }
 
-      this->generateNewActiveTetromino();
+        this->generateNewActiveTetromino();
+      }
     }
   }
 }
@@ -184,10 +190,13 @@ void Board::tick(uint deltaTime) {
 void Board::reset() {
   this->cleanup();
 
+  this->placedTetrominos.resize(0);
+
   this->activeTetromino = nullptr;
   this->dropGhost = nullptr;
+  this->hasLost = false;
 
-  for (size_t i = 0; i < this->grid.size(); ++i) {
+  for (size_t i = 0; i < this->grid.size(); ++i) {    
     for (size_t j = 0; j < this->grid[i].size(); ++j) {
       this->grid[i][j] = nullptr;
     }
@@ -292,6 +301,8 @@ void Board::placeActiveTetromino() {
   for (Cell* cell : tetrominoCells) {
     std::pair<int, int> position = cell->getBoardPosition();
     this->grid[position.second + this->SPAWN_ROWS][position.first] = cell;
+
+    if (position.second < 0) { this->hasLost = true; }
   }
 
   this->activeTetromino = NULL;

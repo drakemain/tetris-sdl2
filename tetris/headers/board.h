@@ -19,6 +19,7 @@ public:
   int getWidth() const;
   int getHeight() const;
   int getGridUnitPixels() const;
+  bool checkHasLost() const;
   uint getDeltaPoints();
 
   void tick(uint deltaTime);
@@ -42,6 +43,7 @@ private:
   void cleanup();
 
   SDL_Rect board;
+  bool hasLost = false;
   const int GRID_WIDTH = 10;
   const int GRID_HEIGHT = 20;
   const int SPAWN_ROWS = 4;

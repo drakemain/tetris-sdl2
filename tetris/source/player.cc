@@ -15,6 +15,7 @@ void Player::incrementScore(const unsigned int amount) {
 
 void Player::tick(uint deltaTime) {
   this->board->tick(deltaTime);
+  this->hasLost = this->board->checkHasLost();
   this->score += this->board->getDeltaPoints();
 }
 
@@ -40,6 +41,11 @@ void Player::handleInput(SDL_Keycode key) {
 
 void Player::reset() {
   this->score = 0;
+  this->hasLost = false;
+}
+
+bool Player::checkHasLost() const {
+  return this->hasLost;
 }
 
 uint Player::getScore() const {

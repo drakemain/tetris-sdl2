@@ -132,18 +132,20 @@ void Tetris::inputHandler() {
 }
 
 void Tetris::keyboardHandler(SDL_Keycode key) {
-  if (key == SDLK_p) {
-    this->togglePause();
-  }
-
-  if (this->isPaused) { return; }
-
   if (key == SDLK_r) {
     this->reset();
   }
   
-  for (Player* player : this->players) {
-    player->handleInput(key);
+  if (!this->hasLost) {
+    if (key == SDLK_p) {
+      this->togglePause();
+    }
+
+    if (this->isPaused) { return; }
+    
+    for (Player* player : this->players) {
+      player->handleInput(key);
+    }
   }
 
 
@@ -200,6 +202,11 @@ void Tetris::tick(uint deltaTime) {
   if (!this->isPaused) {
     for (Player* player : this->players) {
       player->tick(deltaTime);
+
+      if (player->checkHasLost()) {
+        this->hasLost = true;
+        this->isPaused = true;
+      }
     }
 
     this->scoreboard->update(this->players);
@@ -218,4 +225,7 @@ void Tetris::reset() {
   for (Board* board : this->boards) {
     board->reset();
   }
+
+  this->hasLost = false;
+  this->isPaused = false;
 }

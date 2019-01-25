@@ -14,10 +14,13 @@ public:
   void handleInput(SDL_Keycode key);
 
   void reset();
+
+  bool checkHasLost() const;
   
   unsigned int getScore() const;
 private:
   void incrementScore(const unsigned int amount);
+  bool hasLost = false;
 
   unsigned int score = 0;
   class Board* board;
