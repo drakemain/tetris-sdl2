@@ -29,5 +29,5 @@ private:
   class SDL_Rect container;
   TTF_Font* font;
   std::unordered_map<class Player*, unsigned int> scores;
-  std::unordered_map<class Player*, std::pair<class SDL_Texture*, class SDL_Rect>> textures;
+  std::unordered_map<class Player*, class SDL_Texture*> textures;
 };

@@ -61,9 +61,11 @@ bool Tetris::init(uint players = 1) {
   this->input = new Input();
   this->scoreboard = new Scoreboard("tetris/RobotoMono-Medium.ttf");
   this->scoreboard->init(this->players);
+  this->scoreboard->setWidth(this->WINDOW_WIDTH - this->boards[0]->getWidth() * this->boards.size());
+  
   this->scoreboard->setHeight(100);
-  this->scoreboard->setWidth(500);
-  this->scoreboard->setPosition(500, 0);
+  
+  this->scoreboard->setPosition(this->boards[0]->getWidth() * this->boards.size(), 0);
   
   std::cout << "Init successful." << std::endl;
   return success;
