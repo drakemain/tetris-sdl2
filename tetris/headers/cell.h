@@ -41,10 +41,10 @@ public:
 
 private:
   // Used to control the cell's color
-  SDL_Texture* cell;
+  SDL_Texture* cell = nullptr;
   // Determines size and location to render at
   SDL_Rect container;
   SDL_Color color;
 
-  class Tetromino* owner;
+  class Tetromino* owner = nullptr;
 };

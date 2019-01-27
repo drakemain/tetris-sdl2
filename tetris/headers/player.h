@@ -23,5 +23,5 @@ private:
   bool hasLost = false;
 
   unsigned int score = 0;
-  class Board* board;
+  class Board* board = nullptr;
 };

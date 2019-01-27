@@ -4,7 +4,7 @@
 
 class Board {
 public:
-  Board(int heightBound);
+  Board(int heightBound, int horizontalPosition);
   ~Board();
 
   void render(SDL_Renderer* renderer);
@@ -13,6 +13,8 @@ public:
   void generateNewActiveTetromino();
   void generateNewActiveTetromino(Shape shape);
   void destroyActiveTetromino();
+
+  void setBackgroundColor(const SDL_Color);
 
   void createGhost();
 
@@ -43,13 +45,14 @@ private:
   void cleanup();
 
   SDL_Rect board;
+  SDL_Color background = {255, 255, 255, 100};
   bool hasLost = false;
   const int GRID_WIDTH = 10;
   const int GRID_HEIGHT = 20;
   const int SPAWN_ROWS = 4;
   int gridUnitPixels;
-  Tetromino* activeTetromino;
-  Tetromino* dropGhost;
+  Tetromino* activeTetromino = nullptr;
+  Tetromino* dropGhost = nullptr;
   std::vector<Tetromino*> placedTetrominos;
   std::vector<std::vector<Cell*>> grid;
 

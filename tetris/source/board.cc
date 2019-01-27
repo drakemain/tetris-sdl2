@@ -1,8 +1,8 @@
 #include "tetris/headers/board.h"
 #include <iostream>
 
-Board::Board(int heightBound) {
-  this->board.x = 0;
+Board::Board(int heightBound, int horizontalPosition = 0) {
+  this->board.x = horizontalPosition;
   this->board.y = 0;
 
   this->gridUnitPixels = heightBound / this->GRID_HEIGHT;
@@ -23,7 +23,7 @@ Board::~Board() {
 void Board::render(SDL_Renderer* renderer) {
   SDL_RenderSetViewport(renderer, &this->board);
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
+  SDL_SetRenderDrawColor(renderer, this->background.r, this->background.g, this->background.b, this->background.a);
   SDL_RenderFillRect(renderer, NULL);
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
 
@@ -114,6 +114,10 @@ void Board::destroyActiveTetromino() {
   }
 }
 
+void Board::setBackgroundColor(const SDL_Color color) {
+  this->background = color;
+}
+
 void Board::createGhost() {
   if (this->dropGhost) {
     this->dropGhost->destroy();
@@ -121,7 +125,7 @@ void Board::createGhost() {
 
   if (this->activeTetromino) {
     std::vector<Cell*> cells;
-    this->dropGhost = activeTetromino->makeNewCopy();
+    this->dropGhost = this->activeTetromino->makeNewCopy();
     this->dropGhost->setAlpha(96);
 
     this->dropGhost->getCells(cells);

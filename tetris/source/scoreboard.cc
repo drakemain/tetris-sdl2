@@ -22,6 +22,7 @@ Scoreboard::~Scoreboard() {
 
 void Scoreboard::init(std::vector<Player*>& players) {
   this->scores.reserve(players.size());
+  this->textures.reserve(players.size());
   
   for (size_t i = 0; i < players.size(); ++i) {
     this->scores[players[i]] = 0;
@@ -82,7 +83,7 @@ void Scoreboard::draw(Player* player) {
     SDL_DestroyTexture(this->textures[player].first);
   }
 
-  std::string text = "Player " + std::to_string(player->id) + ": " + std::to_string(player->getScore());
+  std::string text = "Player " + std::to_string(player->id + 1) + ": " + std::to_string(player->getScore());
   
   SDL_Surface* surface = TTF_RenderText_Solid(this->font, text.c_str(), {255, 255, 255, 255});
   this->textures[player].first = SDL_CreateTextureFromSurface(this->getRenderer(), surface);

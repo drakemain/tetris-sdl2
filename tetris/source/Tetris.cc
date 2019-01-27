@@ -40,8 +40,22 @@ bool Tetris::init(uint players = 1) {
   }
 
   for (uint i = 0; i < players; ++i) {
-    this->boards.push_back(new Board(this->WINDOW_HEIGHT));
-    this->players.push_back(new Player(this->boards[i]));
+    Board* board;
+
+    if (this->boards.size() == 0) {
+      board = new Board(this->WINDOW_HEIGHT, 0);
+    } else {
+      board = new Board(this->WINDOW_HEIGHT, this->boards[i-1]->getWidth() * i);
+    }
+
+    Uint8 colorValue = (Uint8)(255 - (25 * i));
+
+    board->setBackgroundColor({colorValue, colorValue, colorValue, 100});
+    
+    Player* player = new Player(board);
+
+    this->boards.push_back(board);
+    this->players.push_back(player);
   }
 
   this->input = new Input();
@@ -56,6 +70,7 @@ bool Tetris::init(uint players = 1) {
 }
 
 void Tetris::run() {
+  std::cout << "RUN" << std::endl;
   const int frameCap = 60;
   const float minFrameTime = 1000.f / frameCap;
 
