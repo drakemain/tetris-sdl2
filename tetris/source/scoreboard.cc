@@ -30,8 +30,6 @@ void Scoreboard::init(std::vector<Player*>& players) {
 }
 
 void Scoreboard::setPosition(int x, int y) {
-  printf("Pos: (%d, %d)\n", x, y);
-
   this->container.x = x;
   this->container.y = y;
 }

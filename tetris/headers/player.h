@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include <array>
 
 class Player {
 public:
@@ -19,6 +20,7 @@ public:
   
   unsigned int getScore() const;
 private:
+  std::array<SDL_Keycode, 4> inputSchema;
   void incrementScore(const unsigned int amount);
   bool hasLost = false;
 

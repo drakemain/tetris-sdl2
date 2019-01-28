@@ -1,11 +1,20 @@
 #include "tetris/headers/player.h"
 #include "tetris/headers/board.h"
+#include <array>
+
+std::array<std::array<SDL_Keycode, 4>, 4> inputSchemas = {
+  std::array<SDL_Keycode, 4>{SDLK_w, SDLK_a, SDLK_s, SDLK_d},
+  std::array<SDL_Keycode, 4>{SDLK_t, SDLK_f, SDLK_g, SDLK_h},
+  std::array<SDL_Keycode, 4>{SDLK_i, SDLK_j, SDLK_k, SDLK_l},
+  std::array<SDL_Keycode, 4>{SDLK_UP, SDLK_LEFT, SDLK_DOWN, SDLK_RIGHT}
+};
 
 unsigned int Player::count = 0;
 
 Player::Player(Board* board)
 : id(Player::count), board(board)
-{ 
+{
+  this->inputSchema = inputSchemas[Player::count];
   ++Player::count;
 }
 
@@ -20,22 +29,14 @@ void Player::tick(uint deltaTime) {
 }
 
 void Player::handleInput(SDL_Keycode key) {
-  switch(key) {
-    case SDLK_RIGHT:
-    this->board->shiftActiveTetromino(1, 0);
-    break;
-
-    case SDLK_LEFT:
-    this->board->shiftActiveTetromino(-1, 0);
-    break;
-
-    case SDLK_UP:
+  if (key == this->inputSchema[0]) {
     this->board->rotateActiveTetromino();
-    break;
-
-    case SDLK_DOWN:
+  } else if (key == this->inputSchema[1]) {
+    this->board->shiftActiveTetromino(-1, 0);
+  } else if (key == this->inputSchema[2]) {
     this->board->shiftActiveTetromino(0, 1);
-    break;
+  } else if (key == this->inputSchema[3]) {
+    this->board->shiftActiveTetromino(1, 0);
   }
 }
 
