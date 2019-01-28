@@ -167,6 +167,7 @@ void Board::tick(uint deltaTime) {
     this->timeSinceLastDrop -= dropRate;
     if (!this->shiftActiveTetromino(0, 1)) {
       this->placeActiveTetromino();
+      this->reduceDropRate();
 
       if (!this->hasLost) {
         std::vector<int> filledRows = this->findFilledRows();
@@ -238,6 +239,12 @@ void Board::adjustGhost(int x) {
 
   while (this->isValidMove(this->dropGhost, 0, 1)) {
     this->dropGhost->shift(0, 1);
+  }
+}
+
+void Board::reduceDropRate() {
+  if (this->dropRate > 50) {
+    --this->dropRate;
   }
 }
 

@@ -137,7 +137,7 @@ void Tetris::render() {
 }
 
 void Tetris::inputHandler() {
-  if (this->input->poll()) {
+  while (this->input->poll()) {
     switch(this->input->getType()) {
       case SDL_QUIT:
       this->isRunning = false; break;
@@ -164,55 +164,6 @@ void Tetris::keyboardHandler(SDL_Keycode key) {
       player->handleInput(key);
     }
   }
-
-
-  // if (this->devMode) {
-  //   switch(key) {
-  //     case SDLK_SPACE:
-  //     this->board->createGhost();
-  //     break;
-
-  //     case SDLK_SLASH:
-  //     this->board->generateNewActiveTetromino();
-  //     break;
-
-  //     case SDLK_BACKSLASH:
-  //     this->board->printGrid();
-  //     break;
-
-  //     case SDLK_DELETE:
-  //     this->board->destroyActiveTetromino();
-  //     break;
-
-  //     case SDLK_1:
-  //     this->board->generateNewActiveTetromino(Shape::I);
-  //     break;
-
-  //     case SDLK_2:
-  //     this->board->generateNewActiveTetromino(Shape::J);
-  //     break;
-
-  //     case SDLK_3:
-  //     this->board->generateNewActiveTetromino(Shape::L);
-  //     break;
-
-  //     case SDLK_4:
-  //     this->board->generateNewActiveTetromino(Shape::O);
-  //     break;
-
-  //     case SDLK_5:
-  //     this->board->generateNewActiveTetromino(Shape::S);
-  //     break;
-
-  //     case SDLK_6:
-  //     this->board->generateNewActiveTetromino(Shape::T);
-  //     break;
-
-  //     case SDLK_7:
-  //     this->board->generateNewActiveTetromino(Shape::Z);
-  //     break;
-  //   }
-  // }
 }
 
 void Tetris::tick(uint deltaTime) {

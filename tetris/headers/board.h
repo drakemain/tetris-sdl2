@@ -32,6 +32,7 @@ public:
 
 private:
   void adjustGhost(int x);
+  void reduceDropRate();
   bool isValidMove(Tetromino* tetromino, int xDelta, int yDelta);
   bool boundsCheck(Cell* cell, int xDelta, int yDelta);
   bool boundsCheck(Tetromino&, int xDelta, int yDelta);
